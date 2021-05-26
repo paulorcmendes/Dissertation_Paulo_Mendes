@@ -1,0 +1,73 @@
+%%% -*- coding: utf-8 -*-
+\newpage
+
+\chapter{Related Work}
+\label{chap:related}
+
+In this chapter we make a brief review of the works related to ours, specially in the applications we intend to investigate in our dissertation.
+
+
+\section{Spatiotemporal Localization of Actors}
+
+
+The task of detecting and tracking actors in video has been the focus of many researches. In early 2004, \cite{facetracking_2} used an illumination invariant approach for face detection combined with a tracking mechanism performed by means of continuous detections. \cite{face_tracking} addressed the problem of tracking faces in noisy videos using a tracker that adaptively builds a target model reflecting changes in appearance, typical of a video setting. This kind of approaches does not perform well in the task of spatiotemporal localization of actors because they can only track them when they are continuously present on the video. Differently, the approach we use, which is based on clustering, does not require the actors to be continuously present on the video.
+
+More similar to ours, recent works have investigated the use of clustering for grouping faces of actors in video and, consequently, providing the spatiotemporal localization of them. \cite{video_face_clustering} propose Ball Cluster Learning~(BCL), a supervised approach to carve the embedding space into balls of equal size, one for each cluster. The radius of such ball is translated to a stopping criterion for iterative merging algorithms. \cite{self_supervised} propose a self-supervised Siamese network for video face clustering that can also be used in scenarios where tracks of actors are not available, such as image collections. The approach we use can also be applied to image collections, as further explained in Section \ref{webmedia}, but it differs in the sense that we use pre-trained CNNs and traditional clustering algorithms for performing this task. 
+
+It is worth mentioning that, in this dissertation, we do not intend to directly compare or propose a better method for the task of spatiotemporal localization of actors than the existing ones. Instead, we intend to investigate in what extent our method opens up novel approaches for the three chosen applications and the benefits that can be achieved with our approach.
+
+\section{Video Face Recognition}
+
+Many methodologies have been proposed for Video Face Recognition, most commonly relying on comparing selected facial features of a given image with features of faces within a database.
+%%
+Using only one sample reference image of a person's face for the comparison may result in classification errors due to factors related to variations in lighting, image resolution, angle, etc.~\cite{598229}.
+%%
+To overcome this problem, some face recognition approaches use multiple face samples for comparison. However, this strategy does not scale well as the complexity is a function of the number of samples.
+%%
+Other approaches treat the face recognition task as a classification problem~\cite{dadi2016improved, ghosal}, where a classifier model learns rules to assign faces to previously known classes within a dataset, where each class corresponds to one person.
+%%
+Nonetheless, this kind of approach does not deal well when new classes are incorporated because of the need to retrain the classification models.
+%%
+Moreover, when dealing with video, these kinds of methods have to be applied to each frame, again increasing the complexity.
+
+
+
+Some recent works are focused on video face recognition. Pena \textit{et al.}~\cite{globofacestream} proposed a face recognition system to detect characters within videos, called~\textit{Globo Face Stream}. Their method uses a Histogram of Oriented Gradients (HOG) feature combined with a linear classifier to detect faces. Next, they use  FaceNet to generate the embeddings, followed by the euclidean distance calculus to measure the similarity among faces. Yang \textit{et al.}~\cite{yang2017neural} proposed a deep network for video face recognition called NAN (Neural Aggregation Network). They use a CNN to generate the embeddings, followed by an aggregation module that consists of two attention blocks which adaptively aggregate the feature vectors to form a single feature inside the convex hull spanned by them. Rao \textit{et al.}~\cite{rao2017attention} proposed a method for video face recognition based on attention-aware deep reinforcement learning. They formulated the process of finding the attention of videos as a Markov decision process and training the attention model without using extra labels. Unlike existing attention models, their method takes information from both the image space and the feature space as the input to make use of face information that is discarded in the feature learning process. Sohn \textit{et al.}~\cite{sohn2017unsupervised} proposed an adaptative deep learning framework for image-based face recognition and video-based face recognition. Given an embedding generated by a CNN, their framework adaptation is achieved by (1) distilling knowledge from the network to a video adaptation network through feature matching, (2) performing feature restoration through synthetic data augmentation, and (3) learning a domain-invariant feature through an adversarial domain discriminator. 
+
+Like~\cite{globofacestream, yang2017neural, rao2017attention, sohn2017unsupervised}, our method uses a CNN to generate face embeddings from face images, with the difference that it uses an unsupervised cluster-based method to compare the similarity among face datasets and faces extracted from videos. Also, our approach can detect faces that do not have an identity registered in the face dataset with excellent performance.
+
+\section{Educational Video Recommendation}
+
+Regarding \textit{Educational Video Recommendation}, we cite works based on content-filtering.
+These works perform analyses and comparisons using the video textual description or speech recognition performed on them. 
+Omisore \textit{et. al.} \cite{omisore2014personalized}, for example, propose combining \textit{fuzzy} techniques to recommend books with content suitable for students based on their reading histories in a digital library, while Mahajan \textit{et. al.} \cite{mahajan2015optimising} propose, given a reference video,  mining social media, and web for suggesting links for a student to visit.
+Moreover, Barrére \textit{et. al.}
+~\cite{barrere2020utilizaccao} use texts from speech recognition to create recommendations.
+These works are only based on textual characteristics~(or content converted to it) for performing recommendations.
+Our work focuses on using a visual part of the video, more precisely the presence of actors.
+
+\section{Subtitles Positioning in 360-video}
+\label{sec:subtitles}
+
+Some works have proposed solutions for subtitles positioning based on the current viewport of the user.
+%%
+When defining the \emph{static-follow} strategy, \cite{brown_subtitles_2017} argue that it is a common behaviour for showing information in Virtual Reality~(VR) experiencies, as part of a ``head-up display'' (HUD). In this strategy, the subtitles are shown to the viewer as if they were static relative to their head, by following the viewer as they look around the environment. 
+%%
+The work of \cite{brown_subtitles_2017} define the \emph{lag-follow} stategy to address the sickness related to the \emph{static-follow} strategy while still keeping the subtitles visible to the viewer. Similar to the \emph{static-follow} strategy, the subtiles appear in front of the viewer. It remains in such posititon~(relative to the environment) until the viewer's head rotates more than the 30º threshold. The subtitles then smoothly rotates to be in front of the viewer again. 
+
+
+Other works investigate the usage of subtitles positioned relatively to the world.
+%%
+In the \emph{Repeated Subtitles} strategy~\cite{brown_subtitles_2017}, repeated subtitles are placed around the user. These subtitles stay fixed in the environment and do not follow the user's head motion.
+%%
+In the \emph{Appear} strategy~\cite{brown_subtitles_2017}, the subtitles are placed at the centre of the user's field of view horizontally, 15º bellow eye-level. If the viewer moves their head, the subtitles remain static within the environment and do not follow their gaze. 
+
+More recently, some works have used more complex solutions.
+%%
+As referring to annotations~(that could be subtitles), \cite{matos_dynamic_2018} say that there are cases where the point of interest is moving through the video, which requires a dynamic annotation that follows its movement. 
+%%
+In the \emph{speaker-following subtitles} strategy~\cite{rothe_dynamic_2018}, the subtitles are placed close to the speaker. 
+%%
+Similar to the work of \cite{rothe_dynamic_2018}, we intend to position subtitles close to the speakers in the 360-video. The main difference of our work, however, is that we automatically detect the actors present in a 360-video and use their position for placing the subtitles according to an authoring model we propose.
+  
+

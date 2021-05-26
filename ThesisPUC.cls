@@ -1363,7 +1363,7 @@ Centro Técnico Científico}}
 
 
 \AtBeginDocument{%
-  \bibliographystyle{ThesisPUC}%
+  %\bibliographystyle{ThesisPUC}%
   \renewcommand{\key}[1]{#1. }
   \ifthenelse{\boolean{puc@localebr}}%
   {\special{ pdf: docinfo << /Author (\puc@author) /Title (\puc@title)

@@ -24,11 +24,14 @@
 \usepackage{xcolor}
 \usepackage{tikz}
 \usepackage{psfrag,epsf}
-\usepackage{todonotes}
+%\usepackage{todonotes}
 \usepackage{multirow}
 \usepackage{listings}
 \usepackage{soul}
+%----------citation------------%
+%\usepackage{apacite}
 
+%-----------color-----------------%
 \definecolor{dkblue}{rgb}{0,0,.6}
 \definecolor{turquoise}{rgb}{0.25,0.87,0.82}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
@@ -38,6 +41,9 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 \definecolor{black}{rgb}{0,0,0}
+
+\newcommand{\pmendes}[1]{\color{red}\textbf{paulo says: }#1\color{black}}
+
 
 %\pagestyle{plain}
 
@@ -77,8 +83,9 @@
 
 % This thesis will use colored figures, this goes in the catalographic sheet
 \usecolour{true}
-\title{A Machine Learning-based Approach for  Subtitles Positioning in Interactive 360-degree Video}
-\titleuk{A Machine Learning-based Approach for Subtitles Positioning in Interactive 360-degree Video}
+\title{Spatiotemporal Localization of Actors   in Video/360-Video and its Applications}
+
+\titleuk{Spatiotemporal Localization of Actors in Video/360-Video and its Applications}
 
 \day{27$^{th}$}
 \month{July}
@@ -99,8 +106,7 @@
 % external jury members are declared with \extjurymember{name}{title}{university}
 \jury{
   \jurymember{Alberto Barbosa Raposo}{Prof.}{Departamento de Informática}{PUC-Rio}
-  \extjurymember{Roberto Gerson de Albuquerque Azevedo}{}{Departamento de Ciência da Computação -- ETH Zurich}
-  \extjurymember{Álan Lívio Vasconcelos Guedes}{}{Departamento de Engenharia Elétrica -- UCL}
+  \extjurymember{Roberto Gerson de Albuquerque Azevedo}{Dr.}{Departamento de Ciência da Computação -- ETH Zurich}
   %\extjurymember{Jury 1}{Dr.}{Uni}
   % The person below is mandatory.
   % \schoolhead{Márcio da Silveira Carvalho}{Prof.}
@@ -126,34 +132,37 @@ This study was financed in part by the Coordenação de Aperfeiçoamento de Pess
 % Thats why we have two commands for each language: \keywords declares the keywords for the catalographic sheet, while \keywordsabstract declares the ones for the abstract.
 \keywords
 {
-  \key{Vídeo 360}
-  \key{Autoria Multimídia}
-  \key{Detecção Facial}
   \key{Clusterização}
+  \key{Reconhecimento Facial}
+  \key{Recomendação}
+  \key{Vídeo 360}
+  
+  
 }
 
 \keywordsabstract
 {
-  \key{Vídeo 360;}
-  \key{Autoria Multimídia;}
-  \key{Detecção Facial;}
-  \key{Clusterização.}
+  \key{Clusterização;}
+  \key{Reconhecimento Facial;}
+  \key{Recomendação;}
+  \key{Vídeo 360.}
 }
 
 \keywordsuk
 {
-  \key{360-Video}
-  \key{Multimedia Authoring}
-  \key{Face Detection}
+
   \key{Clustering}
+  \key{Face Recognition}
+  \key{Recommendation}
+  \key{360-Video}
 }
 
 \keywordsabstractuk
 {
-  \key{360-Video;}
-  \key{Multimedia Authoring;}
-  \key{Face Detection;}
-  \key{Clustering.}
+  \key{Clustering;}
+  \key{Face Recognition;}
+  \key{Recommendation;}
+  \key{360-Video.}
 }
 
 \abstract{
@@ -174,11 +183,11 @@ This study was financed in part by the Coordenação de Aperfeiçoamento de Pess
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
-\input{chapters/Introduction}
-\input{chapters/Background}
-\input{chapters/Related}
-\input{chapters/Approach}
-\input{chapters/Conclusions}
+\input{chapters/01_Introduction}
+%\input{chapters/Background}
+\input{chapters/02_Related}
+%\input{chapters/Approach}
+%\input{chapters/Conclusions}
 
 \arial
 \bibliography{references}
@@ -187,5 +196,7 @@ This study was financed in part by the Coordenação de Aperfeiçoamento de Pess
 %\normalfont
 %\appendix
 %\input{appendix.tex}
+
+\bibliographystyle{bibstyles/abnt-alf}
 
 \end{document}
