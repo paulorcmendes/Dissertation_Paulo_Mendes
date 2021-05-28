@@ -4,19 +4,20 @@
 \chapter{Related Work}
 \label{chap:related}
 
-In this chapter we make a brief review of the works related to ours, specially in the applications we intend to investigate in our dissertation.
-
+In this chapter we make a brief review of the works related to ours. Section \ref{sec:spatiotemporal} contains works related to the core method of this word. The next three sections describe works related to the applications we propose based on our core method.
 
 \section{Spatiotemporal Localization of Actors}
+\label{sec:spatiotemporal}
 
 
 The task of detecting and tracking actors in video has been the focus of many researches. In early 2004, \cite{facetracking_2} used an illumination invariant approach for face detection combined with a tracking mechanism performed by means of continuous detections. \cite{face_tracking} addressed the problem of tracking faces in noisy videos using a tracker that adaptively builds a target model reflecting changes in appearance, typical of a video setting. This kind of approaches does not perform well in the task of spatiotemporal localization of actors because they can only track them when they are continuously present on the video. Differently, the approach we use, which is based on clustering, does not require the actors to be continuously present on the video.
 
-More similar to ours, recent works have investigated the use of clustering for grouping faces of actors in video and, consequently, providing the spatiotemporal localization of them. \cite{video_face_clustering} propose Ball Cluster Learning~(BCL), a supervised approach to carve the embedding space into balls of equal size, one for each cluster. The radius of such ball is translated to a stopping criterion for iterative merging algorithms. \cite{self_supervised} propose a self-supervised Siamese network for video face clustering that can also be used in scenarios where tracks of actors are not available, such as image collections. The approach we use can also be applied to image collections, as further explained in Section \ref{webmedia}, but it differs in the sense that we use pre-trained CNNs and traditional clustering algorithms for performing this task. 
+More similar to ours, recent works have investigated the use of clustering for grouping faces of actors in video and, consequently, providing the spatiotemporal localization of them. \cite{video_face_clustering} propose Ball Cluster Learning~(BCL), a supervised approach to carve the embedding space into balls of equal size, one for each cluster. The radius of such ball is translated to a stopping criterion for iterative merging algorithms. \cite{self_supervised} propose a self-supervised Siamese network for video face clustering that can also be used in scenarios where tracks of actors are not available, such as image collections. The approach we use can also be applied to image collections, as further explained in Section \ref{chap:face_recognition}, but it differs in the sense that we use pre-trained CNNs and traditional clustering algorithms for performing this task. 
 
 It is worth mentioning that, in this dissertation, we do not intend to directly compare or propose a better method for the task of spatiotemporal localization of actors than the existing ones. Instead, we intend to investigate in what extent our method opens up novel approaches for the three chosen applications and the benefits that can be achieved with our approach.
 
 \section{Video Face Recognition}
+\label{sec:video_face}
 
 Many methodologies have been proposed for Video Face Recognition, most commonly relying on comparing selected facial features of a given image with features of faces within a database.
 %%
@@ -37,6 +38,7 @@ Some recent works are focused on video face recognition. Pena \textit{et al.}~\c
 Like~\cite{globofacestream, yang2017neural, rao2017attention, sohn2017unsupervised}, our method uses a CNN to generate face embeddings from face images, with the difference that it uses an unsupervised cluster-based method to compare the similarity among face datasets and faces extracted from videos. Also, our approach can detect faces that do not have an identity registered in the face dataset with excellent performance.
 
 \section{Educational Video Recommendation}
+\label{sec:recommendation}
 
 Regarding \textit{Educational Video Recommendation}, we cite works based on content-filtering.
 These works perform analyses and comparisons using the video textual description or speech recognition performed on them. 
