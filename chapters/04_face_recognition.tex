@@ -57,7 +57,7 @@ Figure \ref{fig:cluster_matching} shows our proposed approach.
 
 \begin{figure*}[!ht]
     \centering
-    \includegraphics[width=\textwidth]{img/face_clustering/cluster_matching_process.pdf}
+    \includegraphics[width=\textwidth]{img/face_recognition/cluster_matching_process.pdf}
     \caption{Cluster-Matching based Method for Video Face Recognition.}
     \label{fig:cluster_matching}
 \end{figure*}
@@ -519,6 +519,126 @@ However, when using this approach, the algorithm fails to correctly assign regis
 
 \section{Video Face Recognition Evaluation}
 \label{sec:recognition_video_evaluation}
+
+To evaluate our complete pipeline, we selected videos that contain only registered people (videos \emph{a} to \emph{d}), videos with both registered and non-registered people (videos \emph{e} to \emph{i}) and videos with only non-registered people (videos \emph{j} to \emph{m}).
+%%
+The labeled clusters are the same used in Section \ref{sec:recognition_matching_validation}, which were generated using MTCNN~\cite{mtcnn} for detecting faces, SeNet-50 for extracting its embeddings and the Agglomerative Clustering algorithm to cluster them. 
+%%
+The label of the clusters corresponds to the name of the deputy whose face is more frequent in it.
+
+For performing the face identification on a video file, we first extract its frames using a frame rate of 1fps. 
+%%
+For each of the frames, we extract the faces present on it using MTCNN~\cite{mtcnn}. 
+%%
+Then, for each face identified, we resize it to 224x244, extract its embedding using SeNet-50 and cluster these faces using the Agglomerative Clustering algorithm.
+%%
+Since we do not know the number of people present in the video, we use the strategy described in Subsection \ref{subsec:unknown_nclusters} with the maximum time of sequential increases $t=5$, that was empirically determined to be a good stop point.
+
+Next, we perform the \emph{Cluster Matching} with the labeled clusters and the video face clusters.
+%%
+We used cluster centroids as \emph{cluster embeddings} and a $\alpha=5$ as the results of Section \ref{sec:recognition_matching_validation} show that this configuration is able to correctly match the clusters while preserving the capacity of distinguishing non-registered faces.
+%%
+At the end of this process, each face present on the video is labeled either with the name of a registered person or as non-registered.
+
+We evaluate our method by the Precision~(Prec), Recall (Rec), and F1-Score for the faces in the video. 
+%%
+As usual, the Precision is defined as the percentage of detected faces that our method correctly labels, 
+%%
+the Recall gives the percentage of faces that our method correctly labels among all faces in the video, and 
+%%
+the F1-score represents an overall performance metric based on the  harmonic mean of the precision and recall.
+%%
+We also count the number of exact frames match (\#EM). It corresponds to the number of frames (\#F) for which our method correctly labeled all the faces that appears. %%
+Table \ref{tab:results_videos} shows the results we obtained, the number of different people in each video~(\emph{\#P}), and the number of people who are present in the labeled clusters~(\emph{\#R}).
+
+\begin{table}[!ht]
+\small
+\centering
+\caption{Results using the proposed approach in videos.}
+\label{tab:results_videos}
+\begin{tabular}{@{}cccccccc@{}}
+\toprule
+\textbf{Video} & \textbf{\#P} & \textbf{\#R} & \textbf{\#F} & \textbf{\#EM} & \textbf{Rec.} & \textbf{Prec.} & \textbf{F1} \\ 
+\multicolumn{8}{c}{\cellcolor[HTML]{C0C0C0}{\color[HTML]{000000} videos with only registered people}}\\
+a%\footnote{https://youtu.be/QjTZ\_TE1U\_g} 
+& 1 & 1  & 105 & 105 & 100.000\% & 100.000\% & 100.000\%  \\
+b%\footnote{https://youtu.be/4D5GGR3g\_7c}
+& 1 & 1  & 80  & 79  & 100.000\% & 98.765\%  & 99.379\%   \\
+c%\footnote{https://youtu.be/quYNTUsOTb8}
+& 1 & 1 & 60  & 59   & 100.000\% &	98.113\% & 99.048\%   \\
+d%\footnote{https://youtu.be/eB6kJYaoxHc}
+& 2 & 2  & 226 & 226 & 100.000\% & 100.000\% & 100.000\%  \\ 
+\multicolumn{8}{c}{\cellcolor[HTML]{C0C0C0}{\color[HTML]{000000} videos with both registered and non-registered people}}\\
+e%\footnote{https://youtu.be/j07yExfJ4mA}
+& 2 & 1  & 101 & 99  & 100.000\% & 98.113\%  & 99.048\%   \\
+f%\footnote{https://youtu.be/Db2I1uUyDlE}
+& 2 & 1  & 650 & 650 & 100.000\% & 100.000\% & 100.000\%  \\
+g%\footnote{https://youtu.be/sf56sWeiMyo}
+& 8 & 1  & 201 & 190 & 96.471\%  & 96.850\%  & 96.660\%   \\
+h%\footnote{http://youtu.be/dYAFXogdqW4}
+& 4 & 1  & 231 & 215 & 98.097\%  & 98.514\%  & 98.305\%   \\
+i%\footnote{http://youtu.be/NHglWWOKmc4}
+& 2 & 1  & 88  & 88  & 100.000\% & 100.000\% & 100.000\%  \\ 
+\multicolumn{8}{c}{\cellcolor[HTML]{C0C0C0}{\color[HTML]{000000} videos with only non-registered people}}\\
+j%\footnote{https://youtu.be/UH0nTHb6OdY}
+& 6 & 0  & 625 & 617 & 99.551\%  & 99.551\%  & 99.551\%   \\
+k%\footnote{http://youtu.be/wHN5vYlJ-Vk}
+& 2 & 0  & 231 & 228 & 100.000\% & 98.872\%  & 99.433\%   \\
+l%\footnote{http://youtu.be/WwRdjf4eEgk}
+& 2 & 0  & 131 & 121 & 99.482\%  & 95.522\%  & 97.462\%   \\
+m%\footnote{http://youtu.be/3dIVdsiPDH8}
+& 1 & 0  & 225 & 222 & 99.556\%  & 99.115\%  & 99.335\%   \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+One can observe that our method is able to correctly classify the faces of people that are present in the labeled clusters while also being able to tell when a person is not registered in the labeled clusters.
+%%
+However, Table \ref{tab:results_videos} shows that the precision was smaller for some videos. Analyzing these videos, we observed that this result was mostly due to some non-face objects that were detected as if they were faces.
+%%
+In \emph{Video l}, for instance, in some frames, a mug was detected as if it was a face~(Figure \ref{fig:precision}). 
+%%
+On the other hand, in \emph{Video g}, that had the lowest recall, one face was not detected in some frames because it was partially covered by a text~(Figure \ref{fig:recall}).
+
+\begin{figure}[!ht]
+\centering
+    \begin{subfigure}{0.47\linewidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/face_recognition/maia2.png}
+        \caption{Example where a face is not detected because it is covered}
+        \label{fig:recall}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.47\linewidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/face_recognition/wagner2.png}
+        \caption{Example where a mug is detected as if it was a face.}
+        \label{fig:precision}
+    \end{subfigure}
+\caption{Cases where our approach was incorrect.}
+\end{figure}
+
+Similar to the work of Pena \emph{et. al}~\cite{globofacestream}, our method can be used to generate metadata in video files indicating the people that appear in it.
+%%
+Figure \ref{fig:timeline_pol} shows the first 12 seconds of \emph{Video d}~(detailed in Table \ref{tab:results_videos}) where two identified Brazilian politicians are shown in each frame with its respective colored cluster.
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{img/face_recognition/timeline_pol.png}
+    \caption{Timeline with tagged frames by their clusters of registered people}
+    \label{fig:timeline_pol}
+\end{figure}
+
+Besides being able to recognize people in video files, by using face embeddings and clustering, we can detect the frames where the same person appears without even knowing who the person is or if he/she is in the labeled clusters.
+%%
+Figure \ref{fig:timeline_non_reg} shows the first 24 seconds of \emph{Video j}~(detailed in Table \ref{tab:results_videos}) with the frames tagged with the clusters identified in each frame, where each color represents a cluster.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{img/face_recognition/timeline2.png}
+    \caption{Timeline with tagged frames by their clusters of non-registered people}
+    \label{fig:timeline_non_reg}
+\end{figure}
+
 
 \section{Discussion}
 \label{sec:recognition_discussion}
