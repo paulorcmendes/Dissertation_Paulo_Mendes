@@ -12,7 +12,11 @@ Face recognition becomes a task of comparing clusters from the dataset with the 
 %%
 Therefore, our approach is easily scalable.
 
-This chapter is structured as follows. In Section \ref{sec:recognition_method}, we detail our proposed method, followed by two sections with experiments: 
+This chapter is structured as follows. 
+%%
+In Section \ref{sec:recognition_dataset}, we describe the dataset we produced to perform experiments. 
+%%
+In Section \ref{sec:recognition_method}, we detail our proposed method, followed by two sections with experiments: 
 %%
 Section \ref{sec:recognition_clustering_validation}, regarding the clustering methods we use, and 
 %%
@@ -21,6 +25,28 @@ Section \ref{sec:recognition_matching_validation}, with the experiments with our
 Section \ref{sec:recognition_video_evaluation} is devoted to the overall evaluation of our method and, finally, 
 %%
 in Section \ref{sec:recognition_discussion}, we conclude this chapter by discussing our results.
+
+\section{Dataset}
+\label{sec:recognition_dataset}
+Our dataset was collected using the information provided by the Brazilian Chamber of Deputies\footnote{\url{https://www.camara.leg.br/}} for the 55th legislature, which was in session from February 1st, 2015 through January 31st, 2019.
+%%
+In total, 623 different deputies participated during some period in the 55th legislature, but we collected only 513 deputies from this set.
+
+For each of the 513 deputies, we collected images in which he/she was present using Google images.
+%%
+The resulting dataset has a total of 9,003 images, with a mean of ~17.55 images per deputy and a standard deviation of ~6.91. 
+%%
+The maximum and minimum number of images per deputy are respectively 32 and 2.
+%%
+We have randomly selected one image of each deputy for validation and the rest for training.
+%%
+Thus, our dataset is divided into two: the training set, with 8,490 images, and the validation set, with 513 images.  
+
+Besides, we created another set containing images of people who are not present in the deputies set.
+%%
+For that, we randomly selected 513 images from the \emph{Labeled Faces in the Wild}~(LFW)~\cite{LFWTech} dataset, that contains more than 13,000 images of faces collected from the web,
+%%
+and defined this subset of LFW as our \emph{Non-registered people} set.
 
 \section{Proposed Method}
 \label{sec:recognition_method}
@@ -115,6 +141,24 @@ Hence, the person in the video represented by the query cluster is not present i
 
 \section{Faces Clustering Validation}
 \label{sec:recognition_clustering_validation}
+
+In this section, we evaluate the quality of the clustering generated in the macro-step \emph{Face Clustering}.
+
+In the \emph{Face Detection} step, we use MTCNN~\cite{mtcnn} (Multitask
+Cascaded Convolutional Networks) which is widely used for the face detection task.~\cite{mtcnn1, mtcnn3}
+%%
+We used the  \emph{mtcnn} Python library for its implementation\footnote{\url{https://pypi.org/project/mtcnn/}} and resized each face detected to 224x224.
+
+We tested three different CNNs for the \emph{Embeddings Generation} step in association with three different clustering algorithms for the \emph{Clustering} step.
+%%
+For that, we evaluated each pair of \emph{CNN x ClusteringAlg} through the quality of the clusters they generated. 
+%%
+To experiment, we used the training set with 8490 deputy images.
+
+
+
+
+
 
 \section{Cluster-Matching Validation}
 \label{sec:recognition_matching_validation}
