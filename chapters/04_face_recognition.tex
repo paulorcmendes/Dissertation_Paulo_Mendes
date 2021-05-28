@@ -308,9 +308,12 @@ where
     H(C|K) =  -\sum_{k=1}^{|K|}{\sum_{c=1}^{|C|}{\frac{a_{ck}}{N}log\frac{a_{ck}}{\sum_{c=1}^{|C|}{a_{ck}}}}}
 \end{equation}
 
+\vspace{1em}
+
 \begin{equation}
     H(C) = -\sum_{c=1}^{|C|}{  \frac{\sum_{k=1}^{|K|}a_{ck}}{n}log \frac{\sum_{k=1}^{|K|}a_{ck}}{n} }
 \end{equation}
+\vspace{1em}
 
 Completeness is symmetrical with respect to homogeneity, and it is perfect when a clustering assigns all data points that are members of the same class to a single cluster. 
 %%
@@ -328,10 +331,11 @@ where
 \begin{equation}
     H(K|C) =  -\sum_{c=1}^{|C|}{\sum_{k=1}^{|K|}{\frac{a_{ck}}{N}log\frac{a_{ck}}{\sum_{k=1}^{|K|}{a_{ck}}}}}
 \end{equation}
-\vspace{1em}
+\vspace{2em}
 \begin{equation}
     H(K) = -\sum_{k=1}^{|K|}{  \frac{\sum_{c=1}^{|C|}a_{ck}}{n}log \frac{\sum_{c=1}^{|C|}a_{ck}}{n} }
 \end{equation}
+\vspace{1em}
 
 Finally, by using Equation \ref{equation:homo} and Equation \ref{equation:completeness}, V-measure is defined as 
 \begin{equation}
@@ -642,3 +646,29 @@ Figure \ref{fig:timeline_non_reg} shows the first 24 seconds of \emph{Video j}~(
 
 \section{Discussion}
 \label{sec:recognition_discussion}
+
+This chapter proposed a cluster-matching-based method for video face recognition. 
+%%
+This method uses face embeddings, clustering algorithms, and a heuristic for cluster matching in order to recognize people in video. 
+%%
+Our method has achieved a recall of 99.435\% and a precision of 99.131\% when considering all faces present in the frames extracted from a set of 13 video files.  
+%%
+Moreover, our method is also capable of determining the video segments where each person is present.
+%%
+With this information, it is capable of generating metadata regarding the temporal presence of actors in a video.
+
+As a consequence of face clustering, our work also demonstrates that this technique can be useful for labeling datasets in a less time-consuming way, where clusters are labeled instead of individual data points.
+%%
+Although this work focuses in faces, the method proposed can be applied to other domain fields.
+%%
+The only requirement is that the designer has to  conceive a technique in which objects of the same class are placed closed to each other in the corresponding vector space.
+
+One of the limitations of this work is related to the size of the video set used for the overall evaluation of our method. 
+%%
+This is due to the difficulty of finding videos where it is possible to manually identify in each frame whether each person present is registered or not in our labeled clusters.
+%%
+Other limitation is that the proposed method was not able to detect partially covered faces. 
+%%
+This is due to a limitation of the MTCNN~\cite{mtcnn}, which is currently not robust enough to deal with this condition.
+%%
+In future work, we intend to address these problems.
