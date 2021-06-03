@@ -19,7 +19,7 @@ This method provides an additional aid for educational recommender systems, allo
 The remainder of this chapter is structured as follows.
 Section~\ref{sec:recommendation_dataset} presents the dataset we used.
 We present our method in Section~\ref{sec:recommendation_method}, followed by 
-Section~\ref{sec:recommendation_experiments}, that shows the experiments to validate the face clustering and the video recommendation ranking mechanisms.
+%Section~\ref{sec:recommendation_experiments}, that shows the experiments to validate the face clustering and the video recommendation ranking mechanisms.
 Finally, in Section~\ref{sec:recommendation_discussion}, we conclude this chapter by discussing our results.
 
 \section{Dataset}
@@ -80,8 +80,111 @@ It is important to notice that our method is unsupervised and does not require t
 Consequently, we do not store any information regarding the identity of the lecturers, respecting their privacy.
 
 
-\section{Experiments}
-\label{sec:recommendation_experiments}
+\section{Ranking Evaluation}
+\label{sec:recommendation_ranking_evaluarion}
+
+This section describes an experiment we conducted for evaluating how well our recommendation approach performed in terms of recommending relevant videos. We define that a recommendation is relevant if the reference and the recommended video have at least one lecturer in common.
+
+First we compute the clusters that represent each lecturer in each video using \emph{Video Face Clustering}. 
+%%
+We start by performing \emph{Frames Extraction} for each video file using a frame rate of 1 frame per second~(fps). 
+%%
+Next, in the \emph{Face Detection} step, we use MTCNN \cite{mtcnn} (Multitask
+Cascaded Convolutional Networks).
+%%
+Once we have detected the faces of lecturers in the video frames, we perform \emph{Embeddings Generation} using SeNet-50 \cite{senet} that generates embeddings on the $\mathbb{R}^{2048}$ feature space. 
+%%
+We used the architecture and weights pre-trained on the VGGFace2 dataset~\cite{cao2018vggface2}.
+%%
+Finally, in the \emph{Clustering} step, since we do not know the number of clusters in advance, we used the strategy described in Section \ref{subsec:unknown_nclusters} with $t=5$, $\omega=0.2$, that empirically demonstrated good results. For the \texttt{Clustering} procedure, we used Agglomerative Clustering~\cite{ward1963hierarchical}.
+%%
+The choice of using SeNet-50 and Agglomerative Clustering comes from the fact that this combination achieved the best results in the experiment described in Section \ref{sec:recognition_clustering_validation}.
+
+For performing the video recommendation task, we gather the centroids~(that represent each lecturer in the video) from all videos in the dataset. Next, we perform the process described in Section \ref{sec:recommendation_method}. For \emph{Centroids Clustering}, we also use Algorithm \ref{clustering_alg} with the same parameters $t=5$, $\omega=0.2$, and the Ward Aglommerative Clustering as \texttt{Clustering} procedure. Finally, based on the clusters generated, we perform the \emph{Ranking} step
+
+To evaluate our ranking, for each video we compute the Average Precision~(AP), that evaluates how well a ranking of recommendations is based on each element's relevancy. 
+%%
+This metric penalizes more a ranking if a non-relevant element is recommended in the first positions than if it was in the last ones.
+%%
+Let $P_k$ be the precision of the first $k$ elements of a ranking, which is the percentage of videos that are relevant in the sub-ranking that starts at position $1$ and ends at position $k$.
+%%
+Let $\alpha_k$ denote the relevancy of the video in position $k$, where $\alpha_k = 1$ if the video is relevant, and $0$ otherwise.
+%%
+The AP of a given ranking is defined as follows
+\begin{equation}
+  \label{equation:average_precision}
+  AP = \frac{1}{GTP}\sum_{k=1}^{n}{P_k~\cdot~\alpha_k}
+\end{equation}
+where GTP refers to the total number of ground truth positives in the ranking, which is the total number of videos that are considered relevant in a ranking. Fig.~\ref{fig:ap_example} shows an example of how the AP is computed for a given ranking. In this case, the $GTP=3$ because the total number of relevant videos in the ranking is 3~(videos A, B and D).
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.7\linewidth]{img/video_recommendation/ap_example.pdf}
+  \caption{Example of how the Average Precision~(AP) is computed for a reference video and its recommended videos.}
+  \label{fig:ap_example}
+\end{figure}
+
+In order to prevent outliers from having much influence in the recommendation (e.g. a person that is not a lecturer -- and not relevant to the video -- and appears for a short amount of time), we experimented different thresholds of presence intervals in a video for a person to be considered as ``present'' when computing the score for the ranking. 
+%%
+In this way, a $p_{l,v}$ lesser than the threshold is considered as $0$.
+%%
+Besides the Average Precision, we also compute the mean and minimum values of the recall~(MeanR), precision~(MeanP), and F1-Score~(MeanF1) for the recommendation generated for each of the videos, without considering the positioning of these videos in the rankings.
+%%
+The recall refers to the percentage of relevant videos that are present in the ranking.
+%%
+The F1-score represents an overall performance metric based on the  harmonic mean of the precision and recall and is defined as follows.
+\begin{equation}
+    \label{equation:f1}
+    F1 = \frac{2 \cdot P \cdot R}{P + R}
+\end{equation}
+Table \ref{tab:results} shows the thresholds used, the values of recall, precision, F1-score, and the Mean Average Precision (mAP).
+
+One can observe from Table \ref{tab:results} that the precision clearly increased with the use of the threshold.
+%%
+Different from the precision, the recall decreased with the increase of the threshold. It means that with a greater threshold more videos that should be recommended were not chosen by our method.
+%%
+It is important to notice that these two metrics~(precision and recall) do not consider the ordering of the recommendations.
+%%
+Different from them, the Mean Average Precision~(mAP) has high values for all thresholds, specially because the score for computing the ranking takes into consideration the percentage of time that a person appears in the reference and recommended videos.
+%%
+Then, we can conclude that our proposed approach for ordering the recommended videos tends to recommend more suitable videos first with a high mAP$\approx0.99$. 
+
+\begin{table*}[!ht]
+\small
+\centering
+\caption{Results obtained with our approach with different thresholds of time presence for a lecturer to be considered as present in a video.}
+\label{tab:results}
+\begin{tabular}{ccccc}
+\hline
+\textbf{Thershold} & \textbf{MeanR}  & \textbf{MeanP} & \textbf{MeanF1} &\textbf{mAP} \\ \hline
+0\%                & 0,88851         & 0,64681        & 0,70971         & 0,98641   \\
+1\%                & 0,88851         & 0,64681        & 0,70971         & 0,98641   \\
+2\%                & 0,88851         & 0,64885        & 0,71171         & 0,98641   \\
+3\%                & 0,88851         & 0,67368        & 0,73086         & 0,98642   \\
+4\%                & 0,88851         & 0,67368        & 0,73086         & 0,98642   \\
+5\%                & 0,88851         & 0,69923        & 0,74930         & 0,98642   \\
+6\%                & 0,88851         & 0,73615        & 0,77648         & 0,98642   \\
+7\%                & 0,88742         & 0,77849        & 0,80768         & 0,98642   \\
+8\%                & 0,88742         & 0,78408        & 0,81111         & 0,98643   \\
+9\%                & 0,88742         & 0,80171        & 0,82410         & 0,98643   \\
+10\%               & 0,88742         & 0,83165        & 0,84306         & 0,98643   \\
+11\%               & 0,88742         & 0,85306        & 0,85693         & 0,98643   \\
+12\%               & 0,88616         & 0,85956        & 0,86018         & 0,98662   \\
+13\%               & 0,88490         & 0,88216        & 0,87305         & 0,98688   \\
+14\%               & 0,88289         & 0,90265        & 0,88450         & 0,98884   \\
+15\%               & 0,88289         & 0,90265        & 0,88450         & 0,98884   \\
+16\%               & 0,88163         & 0,91327        & 0,88980         & 0,98908   \\
+17\%               & 0,87197         & 0,91538        & 0,88580         & 0,98912   \\
+18\%               & 0,87197         & 0,91538        & 0,88580         & 0,98912   \\
+19\%               & 0,87086         & 0,93165        & 0,89476         & 0,98946   \\
+20\%               & 0,86130         & 0,93645        & 0,89218         & 0,99000   \\
+21\%               & 0,86130         & 0,93645        & 0,89218         & 0,99000   \\
+22\%               & 0,86130         & 0,95054        & 0,89886         & 0,99000   \\
+23\%               & 0,86130         & 0,95054        & 0,89886         & 0,99000   \\
+24\%               & 0,85805         & 0,95718        & 0,90046         & 0,99165   \\
+25\%               & 0,85805         & 0,95718        & 0,90046         & 0,99165  
+\end{tabular}
+\end{table*}
 
 \section{Discussion}
 \label{sec:recommendation_discussion}
