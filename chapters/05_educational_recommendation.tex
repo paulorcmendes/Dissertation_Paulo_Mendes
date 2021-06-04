@@ -55,9 +55,9 @@ For doing that, we first represent each video in the dataset of educational vide
 
 First, we gather the centroids from the videos of the dataset as one single set and perform the \textit{Centroids Clustering}.
 %%
-For performing this clustering, we also use the strategy for an unknown number of clusters described in Algorithm \ref{clustering_alg}.
+For performing this clustering, we also use the strategy for an unknown number of clusters described in Algorithm \ref{clustering_alg}. 
 %%
-By doing that, we group centroids from the same lecturer that are in different videos. For instance, in Fig. \ref{fig:video_recommendation}, one can see that the \emph{purple lecturer} is present in both Videos 1 and 2, while the \emph{orange lecturer} is present in both Videos 2 and n. By the end of this step, we have the group $L$ of lecturers present in the dataset of videos $V$. We also denote $L_v$ as the group of lecturers present in video $v$.
+By doing that, we group centroids from the same lecturer that are in different videos. For instance, in Figure \ref{fig:video_recommendation}, one can see that the \emph{purple lecturer} is present in both Videos 1 and 2, while the \emph{orange lecturer} is present in both Videos 2 and n. By the end of this step, we have the group $L$ of lecturers present in the dataset of videos $V$. We also denote $L_v$ as the group of lecturers present in video $v$.
 
 Next, based on these relationships among different videos, we perform \textit{Ranking}, by recommending videos in which lecturers of the current video are present. 
 %%
@@ -115,7 +115,7 @@ The AP of a given ranking is defined as follows
   \label{equation:average_precision}
   AP = \frac{1}{GTP}\sum_{k=1}^{n}{P_k~\cdot~\alpha_k}
 \end{equation}
-where GTP refers to the total number of ground truth positives in the ranking, which is the total number of videos that are considered relevant in a ranking. Fig.~\ref{fig:ap_example} shows an example of how the AP is computed for a given ranking. In this case, the $GTP=3$ because the total number of relevant videos in the ranking is 3~(videos A, B and D).
+where GTP refers to the total number of ground truth positives in the ranking, which is the total number of videos that are considered relevant in a ranking. Figure \ref{fig:ap_example} shows an example of how the AP is computed for a given ranking. In this case, the $GTP=3$ because the total number of relevant videos in the ranking is 3~(videos A, B and D).
 
 \begin{figure}[ht]
   \centering
@@ -188,3 +188,29 @@ Then, we can conclude that our proposed approach for ordering the recommended vi
 
 \section{Discussion}
 \label{sec:recommendation_discussion}
+
+In this chapter, we present a method for educational video recommendation using \emph{Video Face Clustering}. More precisely, we use an unsupervised clustering-based method and an heuristic for ranking.
+%%
+It takes advantage of face detection mechanisms to perform educational video recommendation based on the lecturers' presence.
+%%
+Besides the face detection, we also perform face clustering of the lecturers in each video, and, given these clusters, we extract their centroids to perform another clustering step that creates a relationship of videos that share the presence of the same lecturers.
+%%
+Finally, we rank the recommended videos based on the amount of time each lecturer is present.
+%% 
+It is worth mentioning that our method is completely automatic and does not require any information of the video files in advance.  
+%%
+Moreover, our approach does not need to know or store the identity of the lecturers for performing recommendation, preserving their privacy.
+
+A collateral contribution of this application is video segmentation by lecturers.
+As illustrated in Figure \ref{fig:video_timeline}, we can create a timeline based on lecturers' presence, which can be used to help students in finding moments where specific lecturers are present.
+%%
+With this segmentation, we could recommend specific parts of the video to the student.
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{img/face_clustering/example_localization.png}
+  \caption{Educational video timeline tagged by the lecturers presence. Notice that the frames with the lecturer on the left are tagged in red, while the frames with the lecturer on the right are tagged in yellow.}
+  \label{fig:video_timeline}
+\end{figure}
+
+The main limitation of our method is that we can only recommend videos in which the lecturers are visually present. However, this method can be used in a hybrid recommendation approach, that combines both textual and audiovisual information from the video to create clusters. 
