@@ -57,25 +57,82 @@ Our work focuses on using a visual part of the video, more precisely the presenc
 \section{Subtitles Positioning in 360-video}
 \label{sec:subtitles}
 
-Some works have proposed solutions for subtitles positioning based on the current viewport of the user.
+We searched for works that used strategies for subtitles positioning in the last 5 years, and extracted the strategies they presented, also described as subtitling behaviour~\cite{brown_subtitles_2017}, in 360-degree videos. Then, we merged the similar strategies and divided them into three main categories: \emph{screen-referenced subtitles}, \emph{world-referenced subtitles} and \emph{dynamic subtitles}. Each of these categories are described in Subsections \ref{subsec:screen_referenced}, \ref{subsec:world_referenced}, and \ref{subsection:dynamic_subtitles} respectively. Table \ref{tab:catalog} contains a summary about the strategies in each category, their advantages and disadvantages.
 %%
-When defining the \emph{static-follow} strategy, \cite{brown_subtitles_2017} argue that it is a common behaviour for showing information in Virtual Reality~(VR) experiencies, as part of a ``head-up display'' (HUD). In this strategy, the subtitles are shown to the viewer as if they were static relative to their head, by following the viewer as they look around the environment. 
-%%
-The work of \cite{brown_subtitles_2017} define the \emph{lag-follow} stategy to address the sickness related to the \emph{static-follow} strategy while still keeping the subtitles visible to the viewer. Similar to the \emph{static-follow} strategy, the subtiles appear in front of the viewer. It remains in such posititon~(relative to the environment) until the viewer's head rotates more than the 30º threshold. The subtitles then smoothly rotates to be in front of the viewer again. 
+
+\begingroup
+%\renewcommand{\baselinestretch}{1.5}
+\begin{table}[!ht]
+\footnotesize
+\caption{Subtitles positioning strategies catalog for 360-degree video}
+\label{tab:catalog}
+\hspace{-1em}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Category}                                               & \textbf{Strategy}  & \textbf{Advantages}                                                                                    & \textbf{Disadvantages}                                                                                         \\ \midrule
+\multicolumn{1}{c}{\multirow{6}{*}{\textbf{Screen-Referenced}}} & Static-Follow      & \begin{tabular}[c]{@{}l@{}}easy to locate;\\ freedom of\\ movement;\\ most common\\ strategy;\end{tabular} & issues with nausea;                                                                                            \\ \cmidrule(l){2-4} 
+\multicolumn{1}{c}{}                                            & Lag-Follow         & \begin{tabular}[c]{@{}l@{}}issues with\\nausea mitigated\\ in comparison\\to static-follow;\end{tabular} & may cause rereading;                                                                                           \\ \midrule
+\multirow{2}{*}{\textbf{World-Referenced}}                      & Repeated Subtitles & \begin{tabular}[c]{@{}l@{}}comfort;\\ could be\\``burnt-in'' the video;\end{tabular}                    & \begin{tabular}[c]{@{}l@{}}may cover\\important content;\\ may be confusing;\\ not always visible;\end{tabular} \\ \cmidrule(l){2-4} 
+                                                                & Appear             & \begin{tabular}[c]{@{}l@{}}comfort;\\ subtitles can\\be ``dismissed";\end{tabular}                      & \begin{tabular}[c]{@{}l@{}}may be positioned in\\ spurious locations;\\ not always visible;\end{tabular}       \\ \midrule
+\textbf{Dynamic}& Speaker-Following  &\begin{tabular}[c]{@{}l@{}}  help in speaker\\identification; 
+\end{tabular}& not always visible;                                                                                            \\ \bottomrule
+\end{tabular}
+\end{table}
+\endgroup
+
+\subsection{Screen-Referenced Subtitles}
+\label{subsec:screen_referenced}
+
+In this category, the subtitles are positioned taking the screen as reference, which can also be the viewport in a HMD. The subtitles basically follow the user's view and can be seen at any instant of time. We have identified two strategies following this category: \emph{static-follow} and \emph{lag-follow}. Each of these strategies are describe in Subsections \ref{subsubsec:static_follow} and \ref{subsubsec:lag_follow}, respectively.
+
+\subsubsection{Static-Follow}
+\label{subsubsec:static_follow}
+
+When defining the \emph{static-follow} strategy, \cite{brown_subtitles_2017} argue that it is a common behaviour for showing information in Virtual Reality~(VR) experiencies, as part of a ``head-up display'' (HUD). A HUD typically displays graphics that are fixed in front of the viewer at all times regardless of their posture and pose in a VR environment. Figure \ref{fig:static_follow} shows this strategy, which uses the aforementioned HUD mechanic. In this strategy, the subtitles are shown to the viewer as if they were static relative to their head, by following the viewer as they look around the environment. The subtitles are placed 15º vertically bellow eye-level. \cite{brown_subtitles_2017} mention that a possible caveat of this strategy is that some works have reported that overuse of HUD can cause issues with nausea \cite{laviola2000discussion, sharples2008virtual}.
+
+The work of \cite{meira_video_2016} uses this strategy for subtitles positioning. The authors mention that the subtitles are presented at the botton of the user's viewport and follow their gaze, but they do not mention how many degrees bellow eye-level are used. The work of \cite{matos_dynamic_2018} investigates the use of dynamic annotations in 360-degree video, with subtitles being one kind of such annotations. The authors mention the work of \cite{brown_subtitles_2017} and call the \emph{static-follow} strategy by \emph{persistent}, in which subtitles~(annotations) are placed in front of the user's view. \cite{rothe_dynamic_2018} refer to this strategy as \emph{static subtitles}, and say that, in a study they conducted, this was the preferred strategy among the ones proposed by \cite{brown_subtitles_2017}. They also mention that the subtitles were positioned at 12.5º bellow eye-level. The work of \cite{hughes_disruptive_2019} refers to this strategy as \emph{fixed position in the display picture} and mentions that it is the most common way of using subtitles in 360-degree video. Finally, \cite{montagud_culture_2020} says that there is a follow-up on the work \cite{brown_subtitles_2017} that refers to this strategy as \emph{folow head immediately}. In this follow-up work (a white paper), \cite{brown2018exploring} evaluate the four strategies proposed in \cite{brown_subtitles_2017}. 
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/video360/static-follow.png}
+    \caption{Static-Follow: The sequence a, b, c demonstrates how as the user turns their head, the subtitles stay fixed to the centre of their field of view. Extracted from the work of Brown et al. (2017).}
+    \label{fig:static_follow}
+\end{figure}
+
+\subsubsection{Lag-Follow}
+\label{subsubsec:lag_follow}
+
+The work of \cite{brown_subtitles_2017} defines the \emph{lag-follow}~(see Figure \ref{fig:lag_follow}) stategy to address the sicknes related to the \emph{static-follow} strategy while still keeping the subtitles visible to the viewer. Similar to the \emph{static-follow} strategy, the subtiles appear in front of the viewer. It remains in such posititon~(relative to the environment) until the viewer's head rotates more than the 30º threshold. The subtitles then smoothly rotates to be in front of the viewer again. It is worth noticing that the subtitles can only move along the horizontal axis. The main objective of this strategy is to provide freedom of movement to the viewer without immediate reaction from subtitles. \cite{brown_subtitles_2017} say, however, that this strategy may cause the viewer to reread the subtitles, which is not desirable.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/video360/lag-follow.png}
+    \caption{Lag-Follow: a. Small user head movements ($<30^{\circ}$) are ignored. b. But turning beyond this boundary c. The subtitles move smoothly to the center of the field-of-view. Extracted from the work of Brown et al. (2017).}
+    \label{fig:lag_follow}
+\end{figure}
+
+The work of \cite{matos_dynamic_2018} describes a strategy that is basically the same of this one. It is called \emph{floating}, it starts in a position and floats into the viewer's field-of-view. Similar to what was descibed in Subsection \ref{subsubsec:static_follow}, the work of \cite{montagud_culture_2020} refers to this strategy with a different name (\emph{follow with lag}), but having the same definition.
+
+\subsection{World-Referenced Subtitles}
+\label{subsec:world_referenced}
+
+\subsubsection{Repeated Subtitles}
+\label{subsubsection:repeated_subtitles}
+
+\subsubsection{Appear Subtitles}
+\label{subsubsection:appear_subtitles}
+
+\subsection{Dynamic Subtitles}
+\label{subsection:dynamic_subtitles}
+
+\subsubsection{Speaker-Following Subtitles}
+\label{subsubsec:speaker_following}
 
 
-Other works investigate the usage of subtitles positioned relatively to the world.
-%%
-In the \emph{Repeated Subtitles} strategy~\cite{brown_subtitles_2017}, repeated subtitles are placed around the user. These subtitles stay fixed in the environment and do not follow the user's head motion.
-%%
-In the \emph{Appear} strategy~\cite{brown_subtitles_2017}, the subtitles are placed at the centre of the user's field of view horizontally, 15º bellow eye-level. If the viewer moves their head, the subtitles remain static within the environment and do not follow their gaze. 
 
-More recently, some works have used more complex solutions.
-%%
-As referring to annotations~(that could be subtitles), \cite{matos_dynamic_2018} say that there are cases where the point of interest is moving through the video, which requires a dynamic annotation that follows its movement. 
-%%
-In the \emph{speaker-following subtitles} strategy~\cite{rothe_dynamic_2018}, the subtitles are placed close to the speaker. 
-%%
+
+
+
 Similar to the work of \cite{rothe_dynamic_2018}, we intend to position subtitles close to the speakers in the 360-video. The main difference of our work, however, is that we automatically detect the actors present in a 360-video and use their position for placing the subtitles according to an authoring model we propose.
   
 
