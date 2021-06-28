@@ -48,29 +48,25 @@ Recommendation mechanisms are usually based on two methods: \textit{collaborativ
 In collaborative filtering, the system groups users based on their common interest on items, using users' preferences, rates, purchases or accesses to those items. With this approach, 
 knowledge about the item's content is not needed; the recommendation is purely based on the relationship between users and items.  The content-based filtering, differently, requires items' description; similar items are the ones recommended to the user. Our approach fits in the latter category. In the remainder of this subsection, we describe some works devoted to the task of general \emph{Video Recommendation}. Moreover, we give a especial focus on works that share our goal of investigating \emph{Educational Video Recommendation}.
 
-The way people watch and consume video content has been changing in the last years, moving from the traditional linear content transmission of  televisions to streaming platforms. These platforms allow users to consume video content on demand. Some examples of such platforms are YouTube,\footnote{https://youtube.com} Netflix,\footnote{https://netflix.com} Prime Video\footnote{https://primevideo.com} and Globoplay.\footnote{https://globoplay.globo.com}. In such platforms, users can retrieve video content through actively searching for their content of interest or can be presented with recommendations of such content, from which they may select one to watch. 
+The way people watch and consume video content has been changing in the last years, moving from the traditional linear content transmission of  televisions to streaming platforms. These platforms allow users to consume video content on demand. Some examples of such platforms are YouTube,\footnote{\url{https://youtube.com}} Netflix,\footnote{\url{https://netflix.com}} Prime Video\footnote{\url{https://primevideo.com}} and Globoplay.\footnote{\url{https://globoplay.globo.com}}. In such platforms, users can retrieve video content through actively searching for their content of interest or can be presented with recommendations of such content, from which they may select one to watch. 
 %%
-In this scenario, recommendations play a fundamental role in content promotion inside these platforms. It is common to use a collaborative filtering approach for recommending content to a specific user, and this kind of approach does not use any information about the content of the video. It is useful and show good results when both the video content and user have a consumption history stored~\cite{ferreira2020investigating}. 
+In this scenario, recommendations play a fundamental role in content promotion inside these platforms. It is common to use a collaborative filtering approach for recommending content to a specific user, and this kind of approach does not use any information about the content of the video. It is useful and shows good results when both the video content and user have a consumption history stored~\cite{ferreira2020investigating}. 
 %%
-However with new titles being uploaded daily to these platforms associated with their expanding user base, collaborative filtering does not perform well when with these new titles and users due to the lack of consumption history~\cite{suvash14social}. For that reason, we discuss works based on content-filtering.
+However with new titles being uploaded daily to these platforms associated with their expanding user base, collaborative filtering does not perform well when with these new titles and users due to the lack of consumption history~\cite{suvash14social}. For that reason, our work is based on content-filtering,
 
+Taking into consideration the problem of video recommendation with recently added videos, \cite{li2017study} propose a content-based video recommendation approach by taking advantage of CNNs to alleviate the cold-start problem. The authors represent video data with features from audio, images and meta-data from the video content and use such content to recommend videos in a streaming platform. In \cite{lee2017large}, the authors model recommendation as a video content bases similarity learning problem, and learn deep video embeddings trained to predict video relationships identified by a co-watch-based system but using only visual and audio content. \cite{han2016dancelets} proposes to take advantage of the intrinsic motion information in dance videos to solve the video recommendation problem. The authors aim at recommending dance videos based on a mid-level action representation called Dancelets and use a random forest-based index to achieve fast matching of styles and to generate the final recommendation ranking of videos. Similar to \cite{li2017study} and \cite{lee2017large}, we take advantage of CNNs for extracting content from the videos and perform recommendations. Differently, our work focuses on recommending videos sharing the presence of the same actors. Similar to \cite{han2016dancelets}, our work also does not require any metadata from the video, it is solely based on the video content.
 
-
-\emph{Video Recommendation} 
-
-Regarding \textit{Educational Video Recommendation}, we cite works based on content-filtering.
-These works perform analyses and comparisons using the video textual description or speech recognition performed on them. Omisore \textit{et. al.} \cite{omisore2014personalized}, for example, propose combining \textit{fuzzy} techniques to recommend books with content suitable for students based on their reading histories in a digital library, while Mahajan \textit{et. al.} \cite{mahajan2015optimising} propose, given a reference video,  mining social media, and web for suggesting links for a student to visit.
+Regarding \textit{Educational Video Recommendation}, most works perform analyses and comparisons using the video textual description or speech recognition performed on them. Omisore \textit{et. al.} \cite{omisore2014personalized}, for example, propose combining \textit{fuzzy} techniques to recommend books with content suitable for students based on their reading histories in a digital library, while Mahajan \textit{et. al.} \cite{mahajan2015optimising} propose, given a reference video,  mining social media, and web for suggesting links for a student to visit.
 Moreover, Barrére \textit{et. al.}
 ~\cite{barrere2020utilizaccao} use texts from speech recognition to create recommendations.
 These works are only based on textual characteristics~(or content converted to it) for performing recommendations.
 Our work focuses on using a visual part of the video, more precisely the presence of actors.
 
-\pmendes{buscar mais trabalhos relacionados a educational video recommendation}
 
 \section{Subtitles Positioning in 360-video}
 \label{sec:subtitles}
 
-We searched for works that used strategies for subtitles positioning in the last 5 years, and extracted the strategies they presented, also described as subtitling behaviour~\cite{brown_subtitles_2017}, in 360-degree videos. Then, we merged the similar strategies and divided them into three main categories: \emph{screen-referenced subtitles}, \emph{world-referenced subtitles} and \emph{dynamic subtitles}. Each of these categories are described in Subsections \ref{subsec:screen_referenced}, \ref{subsec:world_referenced}, and \ref{subsection:dynamic_subtitles} respectively. Table \ref{tab:catalog} contains a summary about the strategies in each category, their advantages and disadvantages.
+We searched for works that used strategies for subtitles positioning and extracted the strategies they presented, also described as subtitling behaviour~\cite{brown_subtitles_2017}, in 360-degree videos. Then, we merged the similar strategies and divided them into three main categories: \emph{screen-referenced subtitles}, \emph{world-referenced subtitles} and \emph{dynamic subtitles}. Each of these categories are described in Subsections \ref{subsec:screen_referenced}, \ref{subsec:world_referenced}, and \ref{subsection:dynamic_subtitles} respectively. Table \ref{tab:catalog} contains a summary about the strategies in each category, their advantages and disadvantages.
 %%
 
 \begingroup
@@ -174,7 +170,7 @@ In this strategy, the subtitles are placed close to the speaker~(see Figure \ref
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=0.85\textwidth]{img/video360/speaker-following.png}
+    \includegraphics[width=0.95\textwidth]{img/video360/speaker-following.png}
     \caption{Speaker-following subtitles. Extracted from the work of Hughes et al. (2019).}
     \label{fig:speaker_following}
 \end{figure}
