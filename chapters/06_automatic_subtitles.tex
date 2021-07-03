@@ -1,5 +1,5 @@
 \newpage
-\chapter{Automatic Subtitles Positioning in 360-Video}
+\chapter{Automatic Subtitles Positioning in 360-Videos}
 \label{chap:subtitles_positioning}
 
 In \cite{mendes2020authoring}, we proposed an authoring model for interactive 360-video. In such a model, we can define interactive 360-videos that are presented together with additional information attached to it, such as image, text, 2D traditional videos and spatial audio. The positioning of such information is defined by their polar coordinates, start time and duration. For instance, we can define that a text moves with the user's head motion and is always visible or that such text is placed at a fixed position if its in user's the field of view. In this chapter we describe how \emph{video face clustering} can be used together with this authoring model for automatic subtitles positioning in 360-video. In Section \ref{sec:authoring_model}, we describe the authoring model we proposed. Section \ref{sec:authoring_clustering_360} describes how we adapt \emph{video face clustering} for the context of 360-videos. Finally, Section \ref{sec:authoring_discussion} describes how we use both the authoring model and \emph{video face clustering} for automatic positioning subtitles in 360-videos.
@@ -7,6 +7,384 @@ In \cite{mendes2020authoring}, we proposed an authoring model for interactive 36
 \section{An Authoring Model for Interactive 360-Videos}
 \label{sec:authoring_model}
 
+In this section, we describe an authoring model for interactive 360-videos. Although the model is not entirely used for subtitles positioning in 360-videos, we describe it completely because the development of such authoring model was part of the researches conducted during our master research.
+
+Despite the limited ``look around'' interactivity supported by traditional 360
+videos and HMDs, \emph{interactive 360
+videos}~\cite{chambel2011,berning2013parnorama} support additional interactive
+elements, such as overlaid 2D/3D information, hyperlinks, and additional input
+elements.
+%%
+Such features allow an enhanced user experience, supporting applications such
+as remote operations and telepresence, museums, immersive interactive
+narratives, and improve educational content.
+%%
+Most of the current 360 video streaming services, however, still do not
+support such interactive features for 360 videos.
+%%
+Indeed, when compared to its 2D-only video counterpart, although most of the
+popular streaming services~(e.g., Youtube and Facebook) offer tools to create
+interactive 2D videos (\emph{e.g.}, to insert additional information,
+subtitles, and hyperlinks), they lack similar tools to create interactive 360
+videos.
+
+We propose a declarative authoring model that allows authors to design and create interactive 360 videos.
+%%
+First, we analyze different scenarios of immersive multimedia applications
+based on 360 videos with the aim of extracting the main requirements for such
+an authoring model.
+%%
+Then, based on the gathered requirements, we propose an XML-based declarative
+model that allows authors to design and create 360 interactive videos.
+
+\pmendes{Verificar depois se coloco a discussão de outros modelos}
+
+\subsection{Scenarios and requirements}
+\label{subsec:authoring_scenarios}
+
+The following target scenarios are used to gather the requirements for our
+authoring model for interactive 360 videos.
+
+\textbf{360 hypervideo}.
+%%
+This scenario is characterized by navigation among 360 videos, and can be useful, for instance, in entertainment or educational context.
+%%
+The user can navigate from the current to another 360 video, while the current
+one proceeds in a ``preview mode''.
+%%
+Besides the support for navigation between 360 degree videos, it should be
+possible to add overlaid information to it~(e.g., image, video, text) to
+enhance its viewing experience.
+%%
+An example of such a scenario is a virtual tour in a museum, where the user
+may navigate through different rooms.
+%%
+Each room could have additional information about the presented piece of art.
+%%
+Another example is virtual learning environment, in which the user can navigate among different topics and learn more about each of them with additional information.
+
+\textbf{Accessible 360 video}. 
+%% 
+In this scenario, a 360 video is presented together with its translation in either sign language or subtitles.
+%%
+For the sign language case, both a 2D regular video using Picture-in-Picture~(PiP) or a 3D human model could be displayed.
+%%
+Such a scenario intends to provide an immersive experience for people with hearing disabilities.
+%%
+An example is a voice-based virtual tutorial for managing a machine in a factory that can support sign languages or subtitles to allow the inclusion of people with hearing disabilities.
+
+\textbf{360 video with guided attention}.
+%%
+In this scenario, a 360 video has a recommended region to look at.
+%%
+Whenever the user is not looking at the recommended region, additional guiders
+(e.g., arrows) can be rendered informing the user to where he should be
+looking in the 360 video.
+%%
+Also, a live view of it can be presented in picture-in-picture~(PiP) in part
+of the field of view; thus, providing the user with key content, whether he/she is looking at it or
+not.
+%%
+Besides visual cues, spatial audio cues are also important in virtual
+environments and can help in guide users' attention.
+%%
+Thus, the audio of the 360-degree video may come from the recommended
+position, in a way that it sounds different depending on the position the user
+is looking at. 
+%%
+To support such a scenario, it should be possible to detect if the user is
+looking at a specific direction of the scene and to render another segment of
+the video using PiP.
+%%
+The region of interest of a 360 degree video is content dependent, thus the
+producer should be able to customize it towards providing the best possible
+user experience.
+%%
+An example of such a scenario is a lecture, in which the recommended position
+to look at is where the lecturer may be located, e.g. the stage.
+
+Based on the above target scenarios, we can extract requirements addressing
+presentation~(RP) and interaction~(RI) that should be
+supported by an authoring model for 360 interactive videos, which are detailed
+in the following.
+
+\begin{itemize}
+    \item \textbf{RP.1 Overlaid information}. Additional media objects
+      (video, image, sound, and text) might be positioned in the 360-degree
+      environment.
+   \item \textbf{RP.2 Styling}. Different media elements may share the same
+      position and presentation characteristics.
+      %%
+      Thus, the author should be able to reuse the same style in different
+      elements.
+  \item \textbf{RP.3 3D Audio}. A 3D audio manipulates the sound delivered by
+    stereo speakers or headphones, creating the idea that the audio is coming
+    from a specific direction.
+  \item \textbf{RP.4 Subtitles}. Support subtitles both world referenced and fixed to the user.
+  \item \textbf{RP.5 360 Spatial Layout}. The media elements should use a
+    360-based coordinate system, whereas the viewer camera is the center.
+  \item \textbf{RP.6 Presentation Timing}. The media elements should be
+    presented synchronized with the 360 video of the scene. 
+  \item \textbf{RI.1 Navigation}. This requirement intent to enable users
+    navigate between 360 videos. This also includes show to users preview of
+    possibles videos to visit.
+  \item \textbf{RI.2 Hotspot}. This requirement defines a position in the
+    360-degree scene in which different actions can be performed when the user
+    looks at it or is not looking at it.
+  \item \textbf{RI.3 Viewport preview}. This requirement refers to the use of
+    a picture-in-picture live view at the user's current viewport, rendering
+    an important section of the 360-degree scene defined by a \emph{hotspot}.
+\end{itemize}
+
+
+
+\subsection{Proposed model}
+\label{subsec:proposal}
+ 
+To full-fill the aforementioned requirements, we propose an authoring model that allows authors to design and create 360 interactive videos. Table~\ref{tbl:entities} presents the entities of the model.
+\pmendes{verificar onde por tpos}
+\begin{table}[!ht]
+\footnotesize
+\begin{tabularx}{\linewidth}{ p{3cm} p{4cm} X }
+\hline
+
+\textbf{element} & \textbf{children} & \textbf{attributes}\\ \hline
+
+\textbf{\emph{presentation360}}  & \emph{head}, \emph{\emph{body}} &  \\ \hline
+
+\textbf{\emph{head}}  & \emph{style} &  \\  \hline
+
+\textbf{\emph{style}}  &  & * \\  \hline
+
+\textbf{\emph{body}}  & \emph{scene360}+ & entry \\ \hline
+
+\textbf{\emph{scene360}}  & \emph{text}*, \emph{image}*, \emph{video}*,
+\emph{subtitle}*, \emph{preview}*, \emph{hotspot}*, \emph{mirror}* & src, volume? \\  \hline
+
+\textbf{\emph{text}, \emph{image}}  &  & 
+id, src, r?, phi?, theta?, style?, begin?, dur?, followCamera?, onselect? \\ \hline
+
+\textbf{\emph{audio}, \emph{video}, \emph{subtitle}, \emph{preview}}  &  & 
+id, src, r?, phi?, theta?, style?, begin?, dur?, followCamera?, onselect?, clipBegin?, clipEnd?\\ \hline
+
+\textbf{\emph{mirror}}  &  & 
+id, src, r?, phi?, theta?, style?, begin?, dur?, 
+followCamera? \\ \hline
+
+\textbf{\emph{hotspot}}  &  & 
+id, src, r?, phi?, theta?, 
+style?, begin?, dur?,  onLookAt?, duringNotLookingAt?, onSelect? \\ \hline
+
+\hline
+ \end{tabularx}
+\caption{Elements BNF. Conventionally: a \emph{plus sign} (+) indicates that the element can occur one or more times. The \emph{asterisk} (*) indicates that the element occurs zero or more times. Optional attributes (may not exist or have an occurrence) appear with a \emph{question mark} (?) unlike the others that are mandatory. 
+}
+\label{tbl:entities}
+\end{table}
+
+\emph{<presentation360>} is the root element of our model.
+%%
+It has two children elements: \emph{<head>} and \emph{<body>}.
+%%
+Similar to other declarative multimedia languages~(\emph{e.g}., HTML, SMIL,
+and NCL), the reusable elements inside the \emph{<head>} and the structured
+content inside the \emph{<body>}.
+
+In the \emph{<head>},  reusable objects can grouped by the <style> element,
+which can be seen as a macro in which any of the media attributes may be
+defined (\textbf{RP.2}).
+%%
+Then, any element may reuse these attributes assigning their \emph{style}
+attribute to the \emph{id} of a previously defined \emph{<style>}.
+
+The <\emph{body}> element is composed of different \emph{\emph{<scene360>}}
+elements.
+%%
+Its \emph{entry} attribute indicates the identifier of \textit{<scene360>} that
+starts with the application.
+%%
+The \emph{<scene360>} element is defined by its \emph{id}, \emph{src}~(source
+of the 360-degree video) and \emph{volume} (varying from 0 to 1). 
+%%
+Each scene is composed of a set of media objects and the temporal behavior of
+those objects~(\textbf{RP.1}).
+%%
+In its current version, we support text, image, video, audio, and
+subtitle media objects, each one with its respective XML element~(see
+Table~\ref{tbl:entities}).
+%%
+The following attributes are shared by all media elements:
+
+\begin{itemize}
+  \item \emph{id}: the identifier by which the element is referenced by
+    other elements.
+  \item \emph{r, phi, theta}: define the element 360 spatial position.
+  \item \emph{begin}: the time, in seconds, in which the element is started
+    relatively to the 360-video it is a child of.
+  \item \emph{dur}: the duration, in seconds, of the element.
+  \item \emph{clipBegin, clipEnd}: define that will be presented only a
+    portion from sourced media.
+  \item \emph{followCamera}: a Boolean attribute that, if \emph{true}, makes
+    the element moves with the camera. Such movement creates the impression
+    that the element is fixed for the user.
+  \item \emph{onselect}: it refers to the \emph{id} of a 360-degree
+    interactive video in a way that when the element is selected (using
+    controllers of an HMD), the user is transported to the referred 360-degree
+    interactive video.
+\end{itemize}
+
+Besides the above attributes, individual media objects can also have
+additional attributes.
+%%
+For instance, \emph{<image>}, \emph{<video>} and \emph{<audio>} have the
+attribute \emph{src}, that refers to the file source of the media object;
+%%
+ \emph{<audio>} and \emph{<video>} have the attribute \emph{volume}, that
+defines the volume of such media objects, varying from 0 to 1.
+%%
+\textit{<audio>} also has a 3D behavior (\textbf{RP.3}), in a way that the
+user perceives the position in which it is placed.
+%%
+3D Audio, also referred as spatial audio, is considered itself a type of immersive content~\cite{hughes_disruptive_2019}.
+%%
+\emph{<subtitle>}, \emph{<preview>} and \emph{<mirror>} are non-traditional
+objects.
+%%
+The \emph{<subtitle>} element has also a \emph{src} attribute that refers to an
+SRT~(SubRip Subtitle Format) file (\textbf{RP.4}).
+%%
+Internally, the \emph{<subtitle>} element is a composition of various
+\emph{<text>} elements, using the \emph{begin} and \emph{dur} extracted from
+the SRT file. 
+%%
+And by using the attribute \emph{followCamera}, the subtitles may be world referenced or fixed to the user.
+%%
+\emph{<preview>} and \emph{<mirror>} refer to other elements from the scene
+and have specific behaviors.
+
+In our 360 spatial model (\textbf{RP.5}), the media objects are positioned
+using a polar coordinate system.
+%%
+Figure \ref{fig:polar_coordinates} shows the definition of the polar
+coordinates of a point $C$, which represents the center of a media object.
+%%
+$C1$ is the projection of $C$ on the $xz$ plane, while $C2$ is the projection
+on the $yz$ plane.
+%%
+Each \emph{r} attribute value specifies the radius of an imaginary sphere
+where the media objects are positioned.
+%%
+All of those spheres are concentric.
+%%
+The angles are defined based on the segment that goes from the origin to the
+edge.
+%%
+The attribute \emph{phi}~($\phi$) specifies the horizontal angle~(in degrees)
+from that segment to the one that goes from $C1$ to the origin.
+%%
+Similarly, the attribute \emph{theta}~($\theta$) defines the vertical angle, but using $C2$. 
+%%
+The camera is positioned on the center of that coordinate system ($0$, $0$, $0$) and has a field of view of 60 degrees.
+%%
+The 360 video is rendered as background, so that it is always behind anything else in the scene.
+
+\begin{figure}[!ht]
+    \centering
+    \begin{subfigure}[b]{0.49 \linewidth}
+    \centering
+        \includegraphics[width=0.9\linewidth]{img/video360/polar_coord.png}
+        \caption{Polar coordinates example.}
+        \label{fig:polar_coordinates}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\linewidth}
+    \centering
+        \includegraphics[width=0.9\linewidth]{img/video360/normal_vector.png}
+        \caption{Element rotation example.}
+        \label{fig:element_rotation}
+    \end{subfigure}
+    \caption{Polar coordinates system}
+\end{figure}
+
+The rotation of a media object is set in a
+way that the normal vector on the center of its surface points to the origin.
+%%
+By doing so, in any position it is placed, the media object is always facing the viewer.
+%%
+Figure~\ref{fig:element_rotation} shows this rotation, where \emph{A} is the
+center of the media object.
+
+In the proposed model, each \emph{<scene360>} has always a main 360-degree
+interactive video. 
+%%
+The initial scene in which the application starts is defined by an attribute
+\emph{entry} in the element <body>. 
+%%
+This attribute refers to the \emph{id} attribute of the \emph{<scene360>}
+element pointing to the main 360-degree video. 
+%%
+Media objects inside a 360 scene can be synchronized to main video~(\textbf{RP.6}).
+%%
+For this, we use SMIL \emph{begin} and \emph{dur} attributes in a media
+object.
+%%
+They, respectively, define the start time and duration for the presentation of
+the specified media object.
+
+The \emph{onselect} attribute is used to support user navigation through 360
+scenes~(\textbf{RI.1}).
+%%
+This attribute can be defined in any media element, by referencing the
+\emph{id} of the target scene in its value.
+%%
+Once defined in an element, it transforms it into a navigation element for the
+referenced scene.
+%%
+Moreover, the \emph{<preview>} defines a viewport of a \emph{<scene360>} using
+its \emph{id} in the \emph{src}, which can be viewed as a 2D video inside
+another scene.
+%%
+The temporal segment of the target scene displayed in the preview is defined
+by the attributes \emph{clipBegin} and \emph{clipEnd}. 
+
+The 360 video might have a particular region of interest to the viewer, which
+is represented by the \emph{<hotspot>}~(\textbf{RI.2}) element.
+%%
+Britta~\cite{Britta2017} defines a hotspot as an interactive area in a video
+that invoke an action.
+%%
+The author may create interactions when the user is either looking to it or
+not.
+%%
+As in the other elements, its position is defined by the \emph{r, phi, theta}
+attributes. 
+%%
+This element has also the attributes \emph{onLookAt} and
+\emph{duringNotLookingAt}.
+%%
+The attribute \emph{onLookAt} specifies another element to be started once the
+user looks at the \emph{<hotspot>}.
+%%
+Similarly, the attribute \emph{duringNotLookingAt} specifies another
+element to be started when the user is not looking at the \emph{<hotspot>} and
+is stopped once the user looks at it.
+
+The \emph{<mirror>} element refers to picture-in-picture live view of a
+viewport of the \emph{<scene360>} (\textbf{RI.3}).
+%%
+This viewport is defined using the \emph{src} attribute and assigning it to
+the \emph{id} of a \emph{<hotspot>} element.
+%%
+Using these elements, authors can define that when the user is staring at a
+viewport different from the one defined as a \emph{<hotspot>}, the
+\emph{<mirror>} element will be triggered showing the PiP view at the current
+user's viewport, attracting his attention to the important section of the
+360-degree video.
+%%
+Since the \emph{<mirror>} element refers to a viewport of the current scene,
+it does not support \emph{onselect} because it would not be intuitive to have
+an element referring to a scene and navigating to another when selected.
+
+ 
 \section{Video Face Clustering in 360-Videos}
 \label{sec:authoring_clustering_360}
 
