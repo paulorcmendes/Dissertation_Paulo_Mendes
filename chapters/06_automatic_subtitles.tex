@@ -388,5 +388,57 @@ an element referring to a scene and navigating to another when selected.
 \section{Video Face Clustering in 360-Videos}
 \label{sec:authoring_clustering_360}
 
+Nowadays, the most common way for representing and transmitting 360-video is using an equirectangular projection~\cite{yang2018object}. With the equirectangular projection, each sphere point is defined by two angles~\cite{snyder1987map}: \emph{latitude}~$\theta \in [-90^{\circ}, +90^{\circ}]$ and \emph{longitude}~$\phi \in [-180^{\circ}, +180^{\circ}]$. This kind of projection creates challenges for image processing and computer vision algorithms, especially to the convolution-based ones because of the severe distortions in areas vertically distant from the center of the image~(see Figure \ref{fig:equirectangular_proj}). Due to these distortions, we adapted the \emph{Face Detection} step of our method which uses a traditional CNN. Section \ref{subsec:360_face_detection} describes how we adapted the \emph{Face Detection} step to the 360-video context.
+
+\begin{figure}[!ht]
+\centering
+    \begin{subfigure}{0.47\linewidth}
+        \centering
+        \includegraphics[width=1\textwidth]{img/video360/equi_outdoor.jpg}
+        \caption{Outdoor equirectangular image.}
+        \label{subfig:out_equi}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.47\linewidth}
+        \centering
+        \includegraphics[width=1\textwidth]{img/video360/equi_indoor.jpg}
+        \caption{Indoor equirectangular image.}
+        \label{subfig:in_equi}
+    \end{subfigure}
+
+\caption{Examples of 360-images represented through equirectangular projection.}
+\label{fig:equirectangular_proj}
+\end{figure}
+
+\subsection{Face Detection in Equirectangular 360°}
+\label{subsec:360_face_detection}
+
+In order to mitigate the problem of severe distortions present in the equirectangular projection, we have used an approach based on viewports extraction. Figure \ref{fig:360_face_detection} shows this process and each of its steps is explained in the following paragraphs.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\linewidth]{img/video360/360facedetection.pdf}
+    \caption{360-degree face detection process.}
+    \label{fig:360_face_detection}
+\end{figure}
+
+Given an equirectangular image, which could also be a frame from a 360-video, we first perform \emph{Viewports Extraction}. A viewport represents a portion of the 360-degree scene~(see Figure \ref{fig:authoring_exviewport}), it is similar to when a person takes a picture in the real world. The picture represents the world from a point of view towards a specific direction. A viewport is defined by its center, in polar coordinates (lat, long), its field of view~(FoV), and the width or height of the resulting image. The FoV, given in degrees, is the extend of the 360-image that is present in the viewport.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.5\linewidth]{img/video360/viewport.jpg}
+    \caption{Example of a viewport from a 360-video. Extracted from \cite{nguyen2020evaluation}.}
+    \label{fig:authoring_exviewport}
+\end{figure}
+
+Because we want the viewports to cover the greatest possible area from the 360-degree image, our method receives two parameters: the viewports' \emph{density}~(\emph{d}) and \emph{FoV}. The \emph{density} is equal to the number of viewports in the latitude range. Proportionally, the number of viewports in the longitude range is equal to double the \emph{density}. Figure \ref{fig:authoring_viewports} shows viewports extracted from Figure \ref{subfig:out_equi} with \emph{density}=3 and FoV=60°. As the density was equal to three, the number of viewports is three in the latitude's range and six in the longitude's range. In total, 18 viewports were extracted in the example bellow.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\linewidth]{img/video360/viewports.png}
+    \caption{Viewports extracted from Figure \ref{subfig:out_equi} with \emph{density}=3 and FoV=60°.}
+    \label{fig:authoring_viewports}
+\end{figure}
 \section{Discussion}
+
+
 \label{sec:authoring_discussion}
