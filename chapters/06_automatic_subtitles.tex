@@ -463,7 +463,7 @@ For each face present on the FDDB image, we projected its bounding box to the ne
     \end{subfigure}\hfill
     \begin{subfigure}{0.55\linewidth}
         \centering
-        \includegraphics[height=9em]{img/video360/face_pos.png}
+         \includegraphics[height=9em]{img/video360/face_pos.png}
         \caption{Projection example of FDDB image.}
         \label{subfig:face_pos}
     \end{subfigure}
@@ -471,6 +471,29 @@ For each face present on the FDDB image, we projected its bounding box to the ne
 \caption{FDDB image projection to Equirectangular image.}
 \label{fig:authoring_fddb_proj}
 \end{figure}
+
+Depending on the position that the rectilinear image is projected, the distortions are more or less severe. The distortions increase as the projection vertically distances from the center of the image. Figure \ref{fig:different_projections} shows different resulting equirectangular images depending on the position that the rectilinear image is projected. Notice that the projections vertically close to the border of the image have more distortions than the ones close to the center of the image.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1\linewidth]{img/video360/different_projections.png}
+    \caption{Different resulting synthetic equirectangular images depending on the position that the rectlinear image was projected.}
+    \label{fig:different_projections}
+\end{figure}
+
+We evaluated our approach in the synthetic dataset using MTCNN\cite{mtcnn} as the model for face detection. We compare the usage of MTCNN alone, directly in the equirectangular images, against MTCNN with viewports. For the MTCNN with viewport, we used extracted viewports with \emph{density}=3 and FoV=60°. We evaluated both methods using the Mean Average Precision~(mAP) that is widely used for the object detection task~\cite{map1, map2, map3, map4}. 
+
+
+From Figure \ref{fig:different_projections}, one can notice that a greater module of the latitude~($|lat|$) implies in more severe distortions, as the projection is more vertically distant from the center of the equirectangular image. Figure \ref{fig:results_360_detection} shows the results we obtained for MTCNN and MTCNN with viewports. 
+We vary the x-axis of the chart so that we consider only the synthetic equirectangular images whose projection's $|lat|$ is greater or equal than each x. In this way, a greater x means a more difficult subset of images from our synthetic dataset. The mAP value for MTCNN drops drastically as we start considering only more and more difficult images. In contrast, with the use of viewports, the mAP value decreases but at slower pace.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/video360/results_360_detection.png}
+    \caption{Face detection results using MTCNN and MTCNN with viewports.}
+    \label{fig:results_360_detection}
+\end{figure}
+
 
 
 \section{Discussion}
