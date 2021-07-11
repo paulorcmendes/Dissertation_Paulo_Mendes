@@ -539,10 +539,9 @@ label={list:ex-subtitles}, belowskip=-1\baselineskip, basicstyle=\footnotesize ]
 </presentation360>
 \end{lstlisting}
 
+We can also define a more interactive setting for subtitles in 360-video with our authoring model and \emph{video face clustering}. In this new setting, the subtitles follow the actors when they are in the user's viewport, which means that the user can see them. When they are not visible, subtitles are presented at the bottom center of the user's viewport. Listing \ref{list:ex-interactive-subtitles} contains the definition of this setting. 
 
-
-
-
+In the \emph{head}, we define three \emph{styles}. These \emph{styles} contain attributes that can be reused by the elements in the body. The first two \emph{styles}~(lines 3 and 4) define attributes regarding the actor positions in the 360-video with their respective times. These styles are used by the \emph{subtitle} elements on lines 9 and 10 for defining that such subtitles follow the actors positions. We also define two \emph{hotspot} elements that follow the actor positions~(lines 11 and 12). They are used like triggers with the attribute \emph{duringNotLookingAt} to start the other \emph{subtitles} when the \emph{hotspot} elements~(the actors) are not visible to the user. The other \emph{substile} elements reuse the style defined on line 5. This \emph{style} contains the attribute \emph{followCamera} set to \emph{true}, so that it follows the users head motion. In this way, the \emph{subtitles} defined on lines 13 and 14 follow the user's head motion.
 
 
 \begin{lstlisting}[
@@ -561,9 +560,32 @@ label={list:ex-interactive-subtitles}, belowskip=-1\baselineskip, basicstyle=\fo
       <subtitle style="sty-actor2" src="actor2.srt" theta="5"/>
       <hotspot style ="sty-actor1" duringNotLookingAt="sub-follow-actor1"/>
       <hotspot style ="sty-actor2" duringNotLookingAt="sub-follow-actor2"/>
-      <subtitle id="sub-follow-actor1" src="actor1.srt" style ="sty-follow"/>
-      <subtitle id="sub-follow-actor2" src="actor2.srt" style ="sty-follow"/>
+      <subtitle style ="sty-follow" id="sub-follow-actor1" src="actor1.srt"/>
+      <subtitle style ="sty-follow" id="sub-follow-actor2" src="actor2.srt"/>
     </scene360>
   </body>
 </presentation360>
 \end{lstlisting}
+
+Figure \ref{fig:dynamic_subtitles} show how this setting works. In Figure \ref{subfig:subtitles_actor}, the subtitles are placed closed to the actor that is visible in the current user's viewport. When the actor is not visible, as shown in Figure \ref{subfig:subtitles_bottom}, the subtitles are placed at the bottom of the user's viewport. In this way, the user does not lose the content present on the subtitles.
+
+\begin{figure}[!ht]
+\centering
+    \begin{subfigure}{0.47\linewidth}
+        \centering
+        \includegraphics[width=1\textwidth]{img/video360/subtitles_actor.png}
+        \caption{Subtitles close to actors' faces when they are in the user's viewport.}
+        \label{subfig:subtitles_actor}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.47\linewidth}
+        \centering
+        \includegraphics[width=1\textwidth]{img/video360/subtitles_bottom.png}
+        \caption{Subtitles positioning in the bottom of user's viewport otherwise.}
+        \label{subfig:subtitles_bottom}
+    \end{subfigure}
+
+\caption{Dynamic subtitles positioning using video face clustering and our authoring model.}
+\label{fig:dynamic_subtitles}
+\end{figure}
+
+It is worth noticing that, with this setting, the disadvantage presented in Table \ref{tab:catalog} that the speaker-following subtitles are not always visible to user is mitigated.
