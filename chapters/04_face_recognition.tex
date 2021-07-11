@@ -210,68 +210,7 @@ The clusters are merged following the criteria until the number of clusters $K$ 
 
 Different from the Affinity Propagation algorithm, K-Means and Agglomerative Clustering require the number of clusters in advance. For this case, we used 513~(number of deputies in the \emph{train set}).
 %%
-However, when the number of cluster is not known, a strategy for defining it is required for these two algorithms.
-
-\subsubsection{Iterative Strategy for Unknown Number of Clusters}
-\label{subsec:unknown_nclusters}
-
-We use a strategy based on the \emph{Silhouette Score} ($s$) \cite{rousseeuw1987silhouettes} to choose the best clustering configuration.
-
-The \emph{Silhouette Score}~\cite{rousseeuw1987silhouettes} corresponds to the mean of the \emph{Silhouette Coefficient} of all samples.
-%%
-This coefficient ($S$) for each sample is 
-\begin{equation}
-\label{equation:Silh}
-    S = \frac{b-a}{max(a,b)} 
-\end{equation}
-%%
-where $a$ is the mean distance from a sample to all other samples in the same cluster, and $b$ is the mean distance from a sample to all other samples in the closest cluster to that sample.
-%%
-In this way, the best value is 1 and the worst is -1. Values close to 0 indicate overlapping clusters, whereas negative values usually indicate that a sample has been assigned to the wrong cluster since a different cluster is more similar.
-
-With this strategy~(see Algorithm 1), we increase the number of clusters until the maximum \emph{Silhouette Score} decreases no more than $t$ times in a row or until it reaches the maximum number of clusters~(lines 5-18)
-, which is the number of embeddings~($|e|$).
-%%
-The \texttt{Clustering} procedure (line 7)
-can be substituted by any clustering algorithm that requires the number of clusters in advance.
-%%
-When the iteration stops, we return the clustering configuration with the highest \emph{Silhouette Score}.
-%%
-Since this score requires at least two clusters, it would not be possible to compute it for a clustering configuration with only one cluster~(there are only faces of a single person).
-%%
-To overcome this problem, we start with 2 clusters consecutively increasing it as described above. Then, if the returned clustering configuration has a \emph{Silhouette Score} smaller than a threshold $\omega$, that probably indicates overlapping, we say that all faces belong to one single cluster~(lines 19-20). 
-
-\begin{algorithm}
-\small
-\caption{Iteratively finding the best clustering configuration for unknown number of clusters.}\label{clustering_alg}
-\begin{algorithmic}[1]
-\Procedure{BlindClustering}{$e, t,\omega$}\
-\State $n_K\gets 1$
-\State $s_{max}\gets -1$
-\State $t_{cur}\gets 0$ 
-
-\While{$t_{cur} \leq t \And n_K < |e|$}
-    \State $n_K\gets n_K+1$
-    \State $K_{cur}\gets Clustering(e, n_K)$
-    \State $s \gets SilhouetteScore(K_{cur})$
-    \If{$s < s_{max}$}
-        \State $t_{cur}\gets t_{cur}+1$
-    \Else
-        \State $K\gets K_{cur}$
-        \State $t_{cur}\gets 0$
-        
-        \If{$s > s_{max}$}
-            \State $s_{max} \gets s$
-        \EndIf
-    \EndIf
-\EndWhile
-\If{$s_{max} < \omega$}
-    \State $K\gets OneCluster(e)$
-\EndIf
-\State \textbf{return} $K$
-\EndProcedure
-\end{algorithmic}
-\end{algorithm}
+However, when the number of cluster is not known, we use the strategy defined in Section \ref{subsec:unknown_nclusters}.
 
 \subsection{Metrics}
 %\label{sec:metrics}
