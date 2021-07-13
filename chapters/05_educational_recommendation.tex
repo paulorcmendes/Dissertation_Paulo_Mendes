@@ -25,7 +25,7 @@ Finally, in Section~\ref{sec:recommendation_discussion}, we conclude this chapte
 \section{Dataset}
 \label{sec:recommendation_dataset}
 
-The experiments were conducted using a dataset created in the context of this work.
+The experiments were conducted using a dataset created in the context of this application.
 It is composed of 98 educational videos publicly available on YouTube.\footnote{\url{https://www.youtube.com/channel/UCT0JugAtGmqiYkwxFZOwAtg}}$^{,}$\footnote{\url{https://www.youtube.com/user/deboraaladim}}
 %%
 Each video contains at least one lecturer; moreover, some videos could have some special participation or collaboration. Therefore, the number of lecturers in each video varies from 1 to 5. In total, 16 different lecturers are present in the dataset. Each lecturer is present, in average, in 6.67\% of the videos.
@@ -89,8 +89,7 @@ First we compute the clusters that represent each lecturer in each video using \
 %%
 We start by performing \emph{Frames Extraction} for each video file using a frame rate of 1 frame per second~(fps). 
 %%
-Next, in the \emph{Face Detection} step, we use MTCNN \cite{mtcnn} (Multitask
-Cascaded Convolutional Networks).
+Next, in the \emph{Face Detection} step, we use MTCNN \cite{mtcnn}.
 %%
 Once we have detected the faces of lecturers in the video frames, we perform \emph{Embeddings Generation} using SeNet-50 \cite{senet} that generates embeddings on the $\mathbb{R}^{2048}$ feature space. 
 %%
@@ -100,7 +99,7 @@ Finally, in the \emph{Clustering} step, since we do not know the number of clust
 %%
 The choice of using SeNet-50 and Agglomerative Clustering comes from the fact that this combination achieved the best results in the experiment described in Section \ref{sec:recognition_clustering_validation}.
 
-For performing the video recommendation task, we gather the centroids~(that represent each lecturer in the video) from all videos in the dataset. Next, we perform the process described in Section \ref{sec:recommendation_method}. For \emph{Centroids Clustering}, we also use Algorithm \ref{clustering_alg} with the same parameters $t=5$, $\omega=0.2$, and the Ward Aglommerative Clustering as \texttt{Clustering} procedure. Finally, based on the clusters generated, we perform the \emph{Ranking} step
+For performing the video recommendation task, we gather the centroids~(that represent each lecturer in the video) from all videos in the dataset. Next, we perform the process described in Section \ref{sec:recommendation_method}. For \emph{Centroids Clustering}, we also use Algorithm \ref{clustering_alg} with the same parameters $t=5$, $\omega=0.2$, and the Aglommerative Clustering as \texttt{Clustering} procedure. Finally, based on the clusters generated, we perform the \emph{Ranking} step
 
 To evaluate our ranking, for each video we compute the Average Precision~(AP), that evaluates how well a ranking of recommendations is based on each element's relevancy. 
 %%
@@ -198,7 +197,7 @@ It is worth mentioning that our method is completely automatic and does not requ
 %%
 Moreover, our approach does not need to know or store the identity of the lecturers for performing recommendation, preserving their privacy.
 
-A collateral contribution of this application is video segmentation by lecturers.
+A collateral contribution of this application, that is a result of \emph{Video Face Clustering}, is video segmentation by lecturers.
 As illustrated in Figure \ref{fig:video_timeline}, we can create a timeline based on lecturers' presence, which can be used to help students in finding moments where specific lecturers are present.
 %%
 With this segmentation, we could recommend specific parts of the video to the student.

@@ -8,7 +8,7 @@ In \cite{mendes2020authoring}, we proposed an authoring model for interactive 36
 
 \label{sec:authoring_clustering_360}
 
-Nowadays, the most common way for representing and transmitting 360-video is using an equirectangular projection~\cite{yang2018object}. With the equirectangular projection, each sphere point is defined by two angles~\cite{snyder1987map}: \emph{latitude}~$\theta \in [-90^{\circ}, +90^{\circ}]$ and \emph{longitude}~$\phi \in [-180^{\circ}, +180^{\circ}]$. This kind of projection creates challenges for image processing and computer vision algorithms, especially to the convolution-based ones because of the severe distortions in areas vertically distant from the center of the image~(see Figure \ref{fig:equirectangular_proj}). Due to these distortions, we adapted the \emph{Face Detection} step of our method which uses a traditional CNN. Section \ref{subsec:360_face_detection} describes how we adapted the \emph{Face Detection} step to the 360-video context.
+Nowadays, the most common way for representing and transmitting 360-video is using equirectangular projection~\cite{yang2018object}. With the equirectangular projection, each sphere point is defined by two angles~\cite{snyder1987map}: \emph{latitude}~$\theta \in [-90^{\circ}, +90^{\circ}]$ and \emph{longitude}~$\phi \in [-180^{\circ}, +180^{\circ}]$. This kind of projection creates challenges for image processing and computer vision algorithms, especially to the convolution-based ones because of the severe distortions in areas vertically distant from the center of the image~(see Figure \ref{fig:equirectangular_proj}). Due to these distortions, we adapted the \emph{Face Detection} step of our method which uses a traditional CNN. Section \ref{subsec:360_face_detection} describes how we adapted the \emph{Face Detection} step to the 360-video context.
 
 \begin{figure}[!ht]
 \centering
@@ -41,7 +41,7 @@ In order to mitigate the problem of severe distortions present in the equirectan
     \label{fig:360_face_detection}
 \end{figure}
 
-Given an equirectangular image, which could also be a frame from a 360-video, we first perform \emph{Viewports Extraction}. A viewport represents a portion of the 360-degree scene~(see Figure \ref{fig:authoring_exviewport}), it is similar to when a person takes a picture in the real world. The picture represents the world from a point of view towards a specific direction. A viewport is defined by its center, in polar coordinates (lat, long), its field of view~(FoV), and the width or height of the resulting image. The FoV, given in degrees, is the extend of the 360-image that is present in the viewport.
+Given an equirectangular image, which could also be a frame from a 360-video, we first perform \emph{Viewports Extraction}. A viewport represents a portion of the 360-degree scene~(see Figure \ref{fig:authoring_exviewport}), it is similar to when a person takes a picture in the real world. The picture represents the world from a point of view towards a specific direction. A viewport is defined by its center, in polar coordinates (lat, long), its field of view~(FoV), and the width or height of the resulting image.
 
 \begin{figure}[!ht]
     \centering
@@ -61,11 +61,11 @@ Because we want the viewports to cover the greatest possible area from the 360-d
 
 With these viewports, we hope to reduce the distortions since we are representing the equirectangular image with a series of standard images, similar to the ones used by traditional CNNs. Next, for each of these viewports we perform \emph{Face Detection} using a traditional CNN. Then, for each viewport we have a group of faces detected.
 
-In the last step of our approach, called \emph{Mapping}, we map each face detected back to the equirectangular image. One can notice that some parts of the equirectangular image are present in more than one viewport. Notice that the sun is present in three viewports in the first line of Figure \ref{fig:authoring_viewports}. In order to avoid repeated detections in the equirectangular image, we use the Non-Maximum Supression~(NMS) Algorithm. This algorithm eliminates overlapping bounding boxes within a given threshold and is widely used in object detection algorithms~\cite{nms1, nms2, nms3, nms4, nms5}.
+In the last step of our approach, called \emph{Mapping}, we map each face detected back to the equirectangular image. One can notice that some parts of the equirectangular image are present in more than one viewport. Notice that the sun is present in three viewports in the first line of Figure \ref{fig:authoring_viewports}. In order to avoid repeated detections in the equirectangular image, we use the Non-Maximum Supression~(NMS) algorithm. This algorithm eliminates overlapping bounding boxes within a given threshold and is widely used in object detection algorithms~\cite{nms1, nms2, nms3, nms4, nms5}.
 
 We evaluated this approach in comparison to applying a detection model directly to the equirectangular image. We searched for datasets for face detection in equirectangular 360-images. However, by the time of our search, he have not found any. For that reason, we decided to create a synthetic dataset to perform this evaluation. 
 %%
-Similar to \cite{fu2019fddb}, we created a synthetic dataset based on the FDDB dataset~\cite{jain2010fddb}. In \cite{fu2019fddb}, the authors create a synthetic dataset for face detction in 360-degree fisheye images. Ours, differently, aims at equirectangular images, projecting rectilinear images to the equirectangular projection.
+Similar to \cite{fu2019fddb}, we created a synthetic dataset based on the Face Detection Data set and Benchmark~(FDDB)~\cite{jain2010fddb}. In \cite{fu2019fddb}, the authors create a synthetic dataset for face detction in 360-degree fisheye images. Ours, differently, aims at equirectangular images, projecting rectilinear images to the equirectangular projection.
 
 The FDDB dataset~\cite{jain2010fddb} is a popular benchmark for face detection evaluation containing 2845 images and 5171 faces. We collected 19 indoor and outdoor equirectangular images from Google Images,\footnote{\url{https://www.google.com/imghp}} ESO,\footnote{\url{https://www.eso.org/public}} and PxHere\footnote{\url{https://pxhere.com}} to use as background.
 %%
@@ -92,7 +92,7 @@ For each face present on the FDDB image, we projected its bounding box to the ne
 \label{fig:authoring_fddb_proj}
 \end{figure}
 
-Depending on the position that the rectilinear image is projected, the distortions are more or less severe. The distortions increase as the projection vertically distances from the center of the image. Figure \ref{fig:different_projections} shows different resulting equirectangular images depending on the position that the rectilinear image is projected. Notice that the projections vertically close to the border of the image have more distortions than the ones close to the center of the image.
+Depending on the position that the traditional FDDB image is projected, the distortions are more or less severe. The distortions increase as the projection vertically distances from the center of the image. Figure \ref{fig:different_projections} shows different resulting equirectangular images depending on the projection position. Notice that the projections vertically close to the border of the image have more distortions than the ones close to the center of the image.
 
 \begin{figure}[!ht]
     \centering
@@ -105,7 +105,7 @@ We evaluated our approach in the synthetic dataset using MTCNN\cite{mtcnn} as th
 
 
 From Figure \ref{fig:different_projections}, one can notice that a greater module of the latitude~($|lat|$) implies in more severe distortions, as the projection is more vertically distant from the center of the equirectangular image. Figure \ref{fig:results_360_detection} shows the results we obtained for MTCNN and MTCNN with viewports. 
-We vary the x-axis of the chart so that we consider only the synthetic equirectangular images whose projection's $|lat|$ is greater or equal than each x. In this way, a greater x means a more difficult subset of images from our synthetic dataset. The mAP value for MTCNN drops drastically as we start considering only more and more difficult images. In contrast, with the use of viewports, the mAP value still decreases but at slower pace. Besides achieving better results, one of the main advantages of this technique is that it can be used with a model that was trained for detecting faces in traditional rectlinear images.
+We vary the x-axis of the chart so that we consider only the synthetic equirectangular images whose projection's $|lat|$ is greater or equal than each x. In this way, a greater x means a more difficult subset of images from our synthetic dataset. The mAP value for MTCNN drops drastically as we start considering only more and more difficult images. In contrast, with the use of viewports, the mAP value still decreases but at slower pace. Besides achieving better results, one of the main advantages of this technique is that it can be used with a model that was trained for detecting faces in traditional images.
 
 \begin{figure}[!ht]
     \centering
@@ -158,7 +158,7 @@ authoring model for interactive 360 videos.
 
 \textbf{360 hypervideo}.
 %%
-This scenario is characterized by navigation among 360 videos, and can be useful, for instance, in entertainment or educational context~(see Figure \ref{fig:cenario_hiper}).
+This scenario is characterized by navigation among 360-videos, and can be useful, for instance, in entertainment or educational context~(see Figure \ref{fig:cenario_hiper}).
 %%
 The user can navigate from the current to another 360 video, while the current
 one proceeds in a ``preview mode''.
@@ -252,13 +252,13 @@ in the following.
   \item \textbf{RP.3 3D Audio}. A 3D audio manipulates the sound delivered by
     stereo speakers or headphones, creating the idea that the audio is coming
     from a specific direction.
-  \item \textbf{RP.4 Subtitles}. Support subtitles both world referenced and fixed to the user.
+  \item \textbf{RP.4 Subtitles}. Support subtitles positioning in 360-video.
   \item \textbf{RP.5 360 Spatial Layout}. The media elements should use a
     360-based coordinate system, whereas the viewer camera is the center.
   \item \textbf{RP.6 Presentation Timing}. The media elements should be
     presented synchronized with the 360 video of the scene. 
   \item \textbf{RI.1 Navigation}. This requirement intent to enable users
-    navigate between 360 videos. This also includes show to users preview of
+    navigate between 360 videos. This also includes showing them a preview of
     possibles videos to visit.
   \item \textbf{RI.2 Hotspot}. This requirement defines a position in the
     360-degree scene in which different actions can be performed when the user
@@ -317,8 +317,8 @@ style?, begin?, dur?,  onLookAt?, duringNotLookingAt?, onSelect? \\ \hline
 %%
 It has two children elements: \emph{<head>} and \emph{<body>}.
 %%
-Similar to other declarative multimedia languages~(\emph{e.g}., HTML, SMIL,
-and NCL), the reusable elements inside the \emph{<head>} and the structured
+Similar to other declarative multimedia languages~(\emph{e.g}., HTML, SMIL~\cite{ayers2001synchronized},
+and NCL~\cite{soares2006nested}), the reusable elements inside the \emph{<head>} and the structured
 content inside the \emph{<body>}.
 
 In the \emph{<head>},  reusable objects can grouped by the <style> element,
@@ -402,10 +402,10 @@ All of those spheres are concentric.
 The angles are defined based on the segment that goes from the origin to the
 edge.
 %%
-The attribute \emph{phi}~($\phi$) specifies the horizontal angle~(in degrees)
+The attribute \emph{phi}~($\phi$) specifies the horizontal angle~(or longitude, in degrees)
 from that segment to the one that goes from $C1$ to the origin.
 %%
-Similarly, the attribute \emph{theta}~($\theta$) defines the vertical angle, but using $C2$. 
+Similarly, the attribute \emph{theta}~($\theta$) defines the vertical angle~(or latitude), but using $C2$. 
 %%
 The camera is positioned on the center of that coordinate system ($0$, $0$, $0$) and has a field of view of 60 degrees.
 %%
