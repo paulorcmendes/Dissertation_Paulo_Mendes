@@ -2,57 +2,38 @@
 \chapter{Cluster-Matching-Based Method For Video Face Recognition}
 \label{chap:face_recognition}
 
-In this chapter, we describe the first application we investigated using the \emph{Video Face Clustering} method.
-%%
-We propose a cluster-matching-based approach for video face recognition where \emph{face clustering} is used to group faces in both the face dataset and in the target video~(video face clustering).
-%%
+In this chapter, we describe the first application we investigated using \emph{Video Face Clustering}.
+We propose a cluster-matching-based approach for video face recognition where \emph{face clustering} is used to group faces in both the face dataset and in the target video~(\emph{video face clustering}).
 Consequently, classes do not have to be previously known, and the effort spent with annotations is significantly reduced --- as it is done over clusters instead of single images.
-%%
 Face recognition becomes a task of comparing clusters from the dataset with the ones extracted from images or video sources.
-%%
 Therefore, our approach is easily scalable.
 
 This chapter is structured as follows. 
-%%
 In Section \ref{sec:recognition_dataset}, we describe the dataset we produced to perform experiments. 
-%%
 In Section \ref{sec:recognition_method}, we detail our proposed method, followed by two sections with experiments: 
-%%
 Section \ref{sec:recognition_clustering_validation}, regarding the clustering methods we use, and 
-%%
 Section \ref{sec:recognition_matching_validation}, with the experiments with our matching heuristic.
-%%
 Section \ref{sec:recognition_video_evaluation} is devoted to the overall evaluation of our method and, finally, 
-%%
 in Section \ref{sec:recognition_discussion}, we conclude this chapter by discussing our results.
 
 \section{Dataset}
 \label{sec:recognition_dataset}
 Our dataset was collected using the information provided by the Brazilian Chamber of Deputies\footnote{\url{https://www.camara.leg.br/}} for the 55th legislature, which was in session from February 1st, 2015 through January 31st, 2019.
-%%
 In total, 623 different deputies participated during some period in the 55th legislature, but we collected only 513 deputies from this set.
 
 For each of the 513 deputies, we collected images in which he/she was present using Google images.
-%%
 The resulting dataset has a total of 9,003 images, with a mean of ~17.55 images per deputy and a standard deviation of ~6.91. 
-%%
 The maximum and minimum number of images per deputy are respectively 32 and 2.
-%%
 We have randomly selected one image of each deputy for validation and the rest for training.
-%%
 Thus, our dataset is divided into two: the training set, with 8,490 images, and the validation set, with 513 images.  
 
 Besides, we created another set containing images of people who are not present in the deputies set.
-%%
-For that, we randomly selected 513 images from the \emph{Labeled Faces in the Wild}~(LFW)~\cite{LFWTech} dataset, that contains more than 13,000 images of faces collected from the web,
-%%
-and defined this subset of LFW as our \emph{Non-registered people} set.
+For that, we randomly selected 513 images from the \emph{Labeled Faces in the Wild}~(LFW)~\cite{LFWTech} dataset, that contains more than 13,000 images of faces collected from the web, and defined this subset of LFW as our \emph{Non-registered people} set.
 
 \section{Proposed Method}
 \label{sec:recognition_method}
 
-Our method intends to recognize people in video using CNNs and clustering algorithms.
-%%
+Our method intends to recognize people in video using \emph{Video Face Clustering} and a matching heuristic.
 Figure \ref{fig:cluster_matching} shows our proposed approach.
 
 \begin{figure*}[!ht]
@@ -62,42 +43,26 @@ Figure \ref{fig:cluster_matching} shows our proposed approach.
     \label{fig:cluster_matching}
 \end{figure*}
 
-In our approach we use \emph{Face Clustering} in an images dataset and in the referenced video. Then, the clusters of the images dataset are labeled. 
-%%
+In our approach, we use \emph{Face Clustering} in an images dataset and in the referenced video. Then, the clusters of the images dataset are labeled. 
 In the \textit{Labeling} step, we assign labels~(identities) to represent the clusters.
-%%
 A label can be anything that represents the faces present in the cluster, e.g. a name or an id number. 
-%%
 Using this pipeline, instead of having to label every single face for constructing a labeled dataset, it is only necessary to label each generated cluster.
-%%
 Consequently, all the faces present in a cluster are assigned to the same label. 
-%%
 Hence, the complexity of labeling becomes a function dependent on the number of clusters, which is at most as great as the number of individuals.
-%%
 At the end of this step, we have a dataset of \emph{Labeled Clusters}.
 
 
 Next, we perform \emph{Cluster Matching} where the clusters from the image dataset and from the video are matched using a heuristic based on clusters distance.
-%
 The \textit{Cluster Matching} step receives the set of clusters from the video and the set of labeled clusters, which is used as a reference for recognizing the clusters (and consequently the faces) in the video.
-%%
-%%
 We designed a method based on cluster distance for performing this recognition.
-%%
 We compare each candidate cluster in the video with each of the labeled clusters in the reference dataset, using what we call a \emph{cluster embedding}. This \emph{cluster embedding} is computed for both the candidate cluster in the video and the reference cluster in the labeled dataset.
-%%
 The \emph{cluster embedding} maps each cluster to a vector in the embedding space of the face embeddings.
-%%
-In the experiments, we evaluate two ways of obtaining a \emph{cluster embedding}.
+In Section \ref{sec:recognition_matching_validation}, we evaluate two ways of obtaining a \emph{cluster embedding}.
 
 Let $q$ denote the \emph{cluster embedding} of the query cluster, where $q~\in~\mathbb{R}^{n}$, in which $n$ is the dimension of the embedding space.
-%
 Let $K$ denote the set of labeled clusters. For each $k~\in~K$, let $c_k$ denote the \emph{cluster embedding} of $k$. 
-%
 We compute a similarity function of $q$ and each $c_k$ for $k~\in~K$. 
-%%
 This similarity function is based on the Root Mean Square Error~(RMSE) function, which is largely used for computing embeddings distances in machine learning techniques.\footnote{https://www.sciencedirect.com/topics/engineering/root-mean-square-error}
-%%
 We decided to use the inverse of the RMSE since we want to return larger values for clusters that are closer to $q$, to be able to use these values to compute a probabilistic distribution:
 
 \begin{equation}
@@ -105,7 +70,7 @@ We decided to use the inverse of the RMSE since we want to return larger values 
     s_{q,k} = \frac{1}{\sqrt{\frac{1}{n}\sum_{i=0}^{n}{(q_i-c_{k,i})^2}}}
 \end{equation}
 
-Since we are not interested in clusters that too distant from $q$, we define $\overline{s}_{q,k}$ that considers only the $\alpha$ largest $s_q$ values. The $\alpha$ value is a parameter that we further evaluate in this work. 
+Since we are not interested in clusters that too distant from $q$, we define $\overline{s}_{q,k}$ that considers only the $\alpha$ largest $s_q$ values. The $\alpha$ value is a parameter that we further evaluate in this chapter. 
 Thus, our similarity function becomes
 
 \begin{equation}
@@ -114,7 +79,6 @@ Thus, our similarity function becomes
 \end{equation}
 
 Given the similarity~$\overline{s}_{q,k}$, we compute the probability of $q$ being a match with each labeled cluster using the \emph{softmax} function.
-%%
 This function takes as input a vector of real numbers and normalizes it into a probability distribution consisting of probabilities proportional to the exponential of the input numbers. 
 It is defined as
 
@@ -131,40 +95,29 @@ Finally, we define the function $\sigma$ that, given a \emph{cluster embedding} 
 \end{equation}
 
 The $argmax$ function applied over $p_q$ returns the cluster $k$ whose probability of $q$ being a match with it is the greatest. 
-%%
 We observed that when a cluster has faces that belong to a person present in the labeled clusters, the probability tends to be higher for one single labeled cluster.
-%%
 However, when the person is not in any of the labeled clusters, the probability tends to be more distributed among different labeled clusters.
-%%
 For that reason, when none of the labeled clusters has a probability greater than $0.5$, we say that the query cluster does not match any of the labeled clusters.
-%%
 Hence, the person in the video represented by the query cluster is not present in the labeled clusters.
 
 \section{Faces Clustering Validation}
 \label{sec:recognition_clustering_validation}
 
 In this section, we evaluate the quality of the clustering generated in the macro-step \emph{Face Clustering}.
-%%
 In the \emph{Face Detection} step, we use MTCNN~\cite{mtcnn} (Multitask
 Cascaded Convolutional Networks) which is widely used for the face detection task~\cite{mtcnn1, mtcnn3}.
-%%
 We used the  \emph{mtcnn} Python library for its implementation\footnote{\url{https://pypi.org/project/mtcnn/}} and resized each face detected to 224x224.
-%%
 We tested three different CNNs for the \emph{Embeddings Generation} step in association with three different clustering algorithms for the \emph{Clustering} step.
-%%
 For that, we evaluated each pair of \emph{CNN x ClusteringAlg} through the quality of the clusters they generated. 
-%%
 To experiment, we used the training set with 8490 deputy images.
 
-In what follows, we describe the algorithms used for the experiments, the metrics used to evaluate and the results we obtained.
+In what follows, we describe the algorithms used for the experiments, the metrics used to evaluate, and the results we obtained.
 
 \subsection{Embeddings Generation}
 %\label{subsec:exp_setup}
 
 For this step, we have three candidate CNNs that were previously trained on the VGGFace2 dataset~\cite{cao2018vggface2}. 
-%%
 The VGGFace2 dataset contains $3.31$ million images of $9131$ subjects and has large variations in pose, age, illumination, ethnicity, and profession.
-%%
 The three candidate CNNs used are VGG-16~\cite{vgg16}, ResNet-50~\cite{resnet} and SE-ResNet-50~\cite{senet}~(SeNet-50 for short). VGG-16 generates embeddings in the $\mathbb{R}^{512}$  feature space, while ResNet-50 and SeNet-50 generate embeddings in the $\mathbb{R}^{2048}$ feature space. 
 
 
@@ -174,43 +127,28 @@ The three candidate CNNs used are VGG-16~\cite{vgg16}, ResNet-50~\cite{resnet} a
 For this step, we selected the following clustering algorithms as candidates: K-Means~(KM)~\cite{lloyd1982least}, Affinity Propagation~(AP)~\cite{frey2007clustering}, and Agglomerative Clustering~(AC)~\cite{ward1963hierarchical}. Each of these algorithms is briefly explained next.
 
 K-Means~\cite{lloyd1982least} is one of the most widely used unsupervised machine learning algorithms. 
-%%
 To process the data to be clustered, the K-Means algorithm begins with a randomly selected group of $K$ centroids, which are updated iteratively to optimize the distance of the data points to the closest centroid.
 The algorithm stops when either the centroids have stabilized or the maximum number of iterations has been reached.
 
 The Affinity Propagation algorithm~\cite{frey2007clustering}, in contrast with other clustering methods, does not require the number of clusters to be previously specified.
-%%
 In this algorithm, each data point sends messages to the other points informing them of their relative attractiveness to the sender. 
-%%
-Those targets then reply to the senders informing their availability to associate with them, considering the attractiveness of all the messages it received.
-%%
+Those targets then reply to the senders informing their availability to associate with them, considering the attractiveness of all the messages they received.
 The senders then reply to the targets informing the target's updated relative attractiveness.
-%%
 This process continues until a consensus is established.
-%%
 When the sender data point is associated with one of its targets, that target becomes the point's exemplar.
-%%
 The points with the same exemplar are assigned to the same cluster.
 
 The Agglomerative Clustering algorithm recursively merges the pair of clusters that minimally increase a given linkage distance.
-%%
 The linkage criteria specify the distance to use between two sets of data points.
-%%
 The Agglomerative Clustering algorithm~\cite{ward1963hierarchical} merges pairs of clusters that minimize the linkage criteria.
-%%
 In this work, we chose the \emph{Ward} criteria~\cite{ward1963hierarchical}, which minimizes the variance of the clusters being merged.
-%%
 By using this method, at each step, the algorithm finds the pair of clusters that leads to a minimum increase in total within-cluster variance after merging.
-%%
 This increase is measured by a weighted squared distance between cluster centers.
-%%
 In the first step, each data point is a cluster.
-%%
 The clusters are merged following the criteria until the number of clusters $K$ is reached.
 
 Different from the Affinity Propagation algorithm, K-Means and Agglomerative Clustering require the number of clusters in advance. For this case, we used 513~(number of deputies in the \emph{train set}).
-%%
-However, when the number of cluster is not known, we use the strategy defined in Section \ref{subsec:unknown_nclusters}.
+However, when the number of clusters is not known, we use the strategy defined in Section \ref{subsec:unknown_nclusters}.
 
 \subsection{Metrics}
 %\label{sec:metrics}
@@ -220,19 +158,13 @@ We evaluate the models using the V-Measure~\cite{vmeasure}, which is an entropy-
 
 The V-Measure is a harmonic mean of homogeneity and completeness scores, similar to how precision and recall are frequently combined into F-measure~\cite{van1979information}. It assumes a dataset comprising $N$ data points, and a set of classes, $C = \{c_i|i = 1,..., n\}$ and a set of clusters, $K = \{k_i|i = 1,...,m\}$. They also assume $A$ as a matrix produced by the clustering algorithm representing the clustering solution, such that $A = \{a_{ij}\}$ where $a_{ij}$ is the number of data points that are members of class $c_i$ and elements of cluster $k_j$.
 
-The homogeneity is perfect when a clustering algorithm assigns only those data points that are members of a single class to a single cluster, so that the entropy is zero in each cluster.
-%%
-
+The homogeneity is perfect when a clustering algorithm assigns only those data points that are members of a single class to a single cluster so that the entropy is zero in each cluster.
 In this way, the homogeneity score determines how close a given clustering is to this ideal by examining the conditional entropy of the class distribution given the proposed clustering. 
-%%
 Therefore, when the clustering is perfectly homogeneous, such a value, $H(C|K) = 0$. 
  
 On the other hand, when the clustering is not perfect according to this criterion, this value is proportional to the size of the dataset and the classes.
-%%
 For this reason, the authors normalize this value by the maximum reduction in entropy the clustering information could provide, specifically, $H(C)$.
-%%
 $H(C|K)$ has its maximal value when it is equal to $H(C)$ and provides no new information.
-%%
 
 Finally, to address to the convention of $1$ being desirable and $0$ undesirable, the authors define homogeneity as:
 
@@ -255,9 +187,7 @@ where
 \vspace{1em}
 
 Completeness is symmetrical with respect to homogeneity, and it is perfect when a clustering assigns all data points that are members of the same class to a single cluster. 
-%%
 For computing such a score, the authors examine the distribution of cluster assignments within each class.
-%%
 Completeness is defined as 
 
 \begin{equation}
@@ -284,9 +214,7 @@ Finally, by using Equation \ref{equation:homo} and Equation \ref{equation:comple
 \vspace{0.7em}
 
 The parameter $\beta$ is used to calibrate the relative importance of homogeneity and completeness when computing the V-measure. If $\beta$ is greater than 1, the completeness is more important for the V-measure, whereas 
-%%
 if $\beta$ is less than 1, homogeneity is more important for the V-measure. 
-%%
 In this work, we use $\beta = 1$, so that completeness and homogeneity contribute equally to the V-measure.
 
 \subsection{Results}
@@ -295,9 +223,7 @@ In this work, we use $\beta = 1$, so that completeness and homogeneity contribut
 Table \ref{tab:results_clustering} shows the homogeneity, completeness, and V-Measure for each combination of CNN and clustering algorithm.
 
 From Table \ref{tab:results_clustering}, one can conclude that the best combination of CNN and clustering algorithm was SeNet-50 with Agglomerative Clustering.
-%%
 For this reason, we decided to use SeNet-50 for the \emph{Embeddings Generation} step and the Agglomerative Clustering algorithm for the \emph{Clustering} step.
-%%
 As a result, each face on the dataset is represented as an embedding in the $\mathbb{R}^{2048}$ produced by SeNet-50.
 
 \begin{table}[!ht]
@@ -321,12 +247,9 @@ VGG-16            & AP                  & 0.0000                     & 1.0000   
 \end{table}
 
 One can observe that the Affinity Propagation algorithm had a V-measure of $0$ when used with ResNet-50 and VGG-16. 
-%%
 This happens because, in both cases, the algorithm assigned all the data points~(face embeddings in this context) to one single cluster. 
-%%
-Consequently, those combinations had a homogeneity score of $0$ because there was no information gain after clustering--and completeness of 1 because data points of the same class were not scattered in different clusters.
-%%
-With such a combination, the V-measure, which is a harmonic mean of the homogeneity and completeness, has a value of $0$.
+Consequently, those combinations had a homogeneity score of $0$ because there was no information gain after clustering--and completeness of 1. After all, data points of the same class were not scattered in different clusters.
+With such a combination, the V-measure, which is a harmonic mean of homogeneity and completeness, has a value of $0$.
 
 
 \section{Cluster-Matching Validation}
@@ -335,35 +258,25 @@ With such a combination, the V-measure, which is a harmonic mean of the homogene
 Based on the results of the experiment described in Section \ref{sec:recognition_clustering_validation}, we developed another experiment in order to choose the best $\alpha$ value in Equation \ref{equation:similarity} and the best method for computing the \emph{cluster embedding} for the clusters.
 
 As the best combination for clustering was SeNet-50 with the Agglomerative Clustering algorithm, this experiment uses the embeddings and labeled clusters generated by it.
-%%
 Hence, the labeled clusters are the set of faces from the 8490 deputy images with their respective embeddings and labels.
-%%
 Each cluster was labeled with the name of the deputy whose face is more frequent in it.
 
 For testing, we used the \emph{Validation set}~($V$) consisting of 513 deputy images and the \emph{Non-registered people set}~($U$) also consisting of 513 images.
-%%
 We used these images as if they were the clusters from a video file, each cluster having a single sample.
-%%
 In this way, we have a more heterogeneous set for performing this experiment as if we had used a small set of video files.
 
 We evaluate two methods for computing a \emph{cluster embedding} for the labeled clusters: \emph{cluster centroid} and \emph{sample with best silhouette coefficient}. A cluster centroid denotes the mean of the elements in a cluster.
-%%
 It is calculated the mean of all elements in a cluster for each axis in the embedding space. The second method uses the embedding of the sample whose silhouette coefficient is the highest.
-%%
 This coefficient is calculated using the mean intra-cluster distance and the mean nearest-cluster distance for each sample~(detailed in Subsection \ref{subsec:unknown_nclusters}).
 
 \subsection{Metrics}
 
 We evaluate the two methods for computing the \emph{cluster embedding} by assessing how well the cluster matching recognizes registered people and correctly tells when a person is not registered.
-%%
 A non-registered person should not have a match with any of the labeled clusters.
 
 Let $\lambda(q)$ be the most frequent label of a cluster $q$, $|V|$ the size of the \emph{Validation set} and $|U|$ the size of the \emph{Non-registered people set}.
-%%
 Although $\lambda$ represents the label of a cluster in general, we also define $\Lambda$ as being the set of all the face labels present in a cluster.
-%%
 Let us also assume true as $1$ and false as $0$.
-%%
 To perform the evaluation, we compute the following four metrics:
 
 \vspace{2em}
@@ -402,16 +315,12 @@ Where $m_1$ denotes the percentage of clusters from $V$ matched with any cluster
 
 \subsection{Results}
 
-In this subsection we show the results for each of the methods for generating the \emph{cluster embeddings} in the \emph{cluster matching} step.
-%%
+In this subsection, we show the results for each of the methods for generating the \emph{cluster embeddings} in the \emph{cluster matching} step.
 For each of the methods, we tested different $\alpha$ values in Equation \ref{equation:similarity}.
 
 Table \ref{tab:results_centroid} shows the results obtained using the cluster centroids as \emph{cluster embeddings}.
-%%
-It can be seen that with the higher the $\alpha$ value is, the lower is the percentage of registered faces assigned to the correct labeled cluster.
-%%
+It can be seen that the higher the $\alpha$ value is, the lower is the percentage of registered faces assigned to the correct labeled cluster.
 On the other hand, the percentage of non-registered faces assigned to none of the labeled clusters increases with the $\alpha$ value.
-%%
 One can see that with $\alpha = 5$, we have a balance between assigning people to the correct cluster and being able to tell when a person is not in the labeled clusters.
 
 \begin{table}[!ht]
@@ -435,11 +344,8 @@ One can see that with $\alpha = 5$, we have a balance between assigning people t
 \end{table}
 
 Table \ref{tab:results_silhouette} shows the results obtained using the sample with the highest silhouette coefficient as the \emph{cluster embedding} for each of the labeled clusters.
-%%
 One can observe that the $\alpha$ value correlates with the percentage values similar to the one observed in Table \ref{tab:results_centroid}.
-%%
 By using the silhouette coefficient for choosing the \emph{cluster centroids}, we have an algorithm more capable of determining when a person is not registered, achieving a percentage of $100\%$ when $\alpha>5$.
-%%
 However, when using this approach, the algorithm fails to correctly assign registered people to the correct labeled cluster in comparison to when it uses the cluster centroids.
 
 \begin{table}[!ht]
@@ -466,34 +372,23 @@ However, when using this approach, the algorithm fails to correctly assign regis
 \label{sec:recognition_video_evaluation}
 
 To evaluate our complete pipeline, we selected videos that contain only registered people (videos \emph{a} to \emph{d}), videos with both registered and non-registered people (videos \emph{e} to \emph{i}) and videos with only non-registered people (videos \emph{j} to \emph{m}).
-%%
-The labeled clusters are the same used in Section \ref{sec:recognition_matching_validation}, which were generated using MTCNN~\cite{mtcnn} for detecting faces, SeNet-50 for extracting its embeddings and the Agglomerative Clustering algorithm to cluster them. 
-%%
+The labeled clusters are the same used in Section \ref{sec:recognition_matching_validation}, which were generated using MTCNN~\cite{mtcnn} for detecting faces, SeNet-50 for extracting its embeddings, and the Agglomerative Clustering algorithm to cluster them. 
 The label of the clusters corresponds to the name of the deputy whose face is more frequent in it.
 
 For performing the face identification on a video file, we first extract its frames using a frame rate of 1fps. 
-%%
 For each of the frames, we extract the faces present on it using MTCNN~\cite{mtcnn}. 
-%%
-Then, for each face identified, we resize it to 224x244, extract its embedding using SeNet-50 and cluster these faces using the Agglomerative Clustering algorithm.
-%%
-Since we do not know the number of people present in the video, we use the strategy described in Subsection \ref{subsec:unknown_nclusters} with the maximum time of sequential increases $t=5$, that was empirically determined to be a good stop point.
+Then, for each face identified, we resize it to 224x244, extract its embedding using SeNet-50, and cluster these faces using the Agglomerative Clustering algorithm.
+Since we do not know the number of people present in the video, we use the strategy described in Subsection \ref{subsec:unknown_nclusters} with the maximum time of sequential increases $t=5$, which was empirically determined to be a good stop point.
 
 Next, we perform the \emph{Cluster Matching} with the labeled clusters and the video face clusters.
-%%
-We used cluster centroids as \emph{cluster embeddings} and a $\alpha=5$ as the results of Section \ref{sec:recognition_matching_validation} show that this configuration is able to correctly match the clusters while preserving the capacity of distinguishing non-registered faces.
-%%
+We used cluster centroids as \emph{cluster embeddings} and a $\alpha=5$ as the results of Section \ref{sec:recognition_matching_validation} show that this configuration can correctly match the clusters while preserving the capacity of distinguishing non-registered faces.
 At the end of this process, each face present on the video is labeled either with the name of a registered person or as non-registered.
 
 We evaluate our method by the Precision~(Prec), Recall (Rec), and F1-Score for the faces in the video. 
-%%
-As usual, the Precision is defined as the percentage of detected faces that our method correctly labels, 
-%%
+As usual, Precision is defined as the percentage of detected faces that our method correctly labels, 
 the Recall gives the percentage of faces that our method correctly labels among all faces in the video, and 
-%%
-the F1-score represents an overall performance metric based on the  harmonic mean of the precision and recall.
-%%
-We also count the number of exact frames match (\#EM). It corresponds to the number of frames (\#F) for which our method correctly labeled all the faces that appears. %%
+the F1-score represents an overall performance metric based on the harmonic mean of the precision and recall.
+We also count the number of exact frames match (\#EM). It corresponds to the number of frames (\#F) for which our method correctly labeled all the faces that appear. %%
 Table \ref{tab:results_videos} shows the results we obtained, the number of different people in each video~(\emph{\#P}), and the number of people who are present in the labeled clusters~(\emph{\#R}).
 
 \begin{table}[!ht]
@@ -538,13 +433,10 @@ m%\footnote{http://youtu.be/3dIVdsiPDH8}
 \end{table}
 
 
-One can observe that our method is able to correctly classify the faces of people that are present in the labeled clusters while also being able to tell when a person is not registered in the labeled clusters.
-%%
+One can observe that our method can correctly classify the faces of people that are present in the labeled clusters while also being able to tell when a person is not registered in the labeled clusters.
 However, Table \ref{tab:results_videos} shows that the precision was smaller for some videos. Analyzing these videos, we observed that this result was mostly due to some non-face objects that were detected as if they were faces.
-%%
 In \emph{Video l}, for instance, in some frames, a mug was detected as if it was a face~(Figure \ref{fig:precision}). 
-%%
-On the other hand, in \emph{Video g}, that had the lowest recall, one face was not detected in some frames because it was partially covered by a text~(Figure \ref{fig:recall}).
+On the other hand, in \emph{Video g}, which had the lowest recall, one face was not detected in some frames because it was partially covered by a text~(Figure \ref{fig:recall}).
 
 \begin{figure}[!ht]
 \centering
@@ -564,7 +456,6 @@ On the other hand, in \emph{Video g}, that had the lowest recall, one face was n
 \end{figure}
 
 Similar to the work of Pena \emph{et. al}~\cite{globofacestream}, our method can be used to generate metadata in video files indicating the people that appear in it.
-%%
 Figure \ref{fig:timeline_pol} shows the first 12 seconds of \emph{Video d}~(detailed in Table \ref{tab:results_videos}) where two identified Brazilian politicians are shown in each frame with its respective colored cluster.
 \begin{figure}[!ht]
     \centering
@@ -574,7 +465,6 @@ Figure \ref{fig:timeline_pol} shows the first 12 seconds of \emph{Video d}~(deta
 \end{figure}
 
 Besides being able to recognize people in video files, by using face embeddings and clustering, we can detect the frames where the same person appears without even knowing who the person is or if he/she is in the labeled clusters.
-%%
 Figure \ref{fig:timeline_non_reg} shows the first 24 seconds of \emph{Video j}~(detailed in Table \ref{tab:results_videos}) with the frames tagged with the clusters identified in each frame, where each color represents a cluster.
 
 \begin{figure}[!ht]
@@ -589,24 +479,16 @@ Figure \ref{fig:timeline_non_reg} shows the first 24 seconds of \emph{Video j}~(
 \label{sec:recognition_discussion}
 
 This chapter proposed a cluster-matching-based method for video face recognition. 
-%%
-This method uses face embeddings, clustering algorithms, and a heuristic for cluster matching in order to recognize people in video. 
-%%
-Our method has achieved a recall of 99.435\% and a precision of 99.131\% when considering all faces present in the frames extracted from a set of 13 video files.  
+This method uses \emph{Video Face Clustering} and a heuristic for cluster matching to recognize people in videos. 
+Our method has achieved a recall of 99.435\% and precision of 99.131\% when considering all faces present in the frames extracted from a set of 13 video files.  
 %%
 
 As a consequence of face clustering, our work also demonstrates that this technique can be useful for labeling datasets in a less time-consuming way, where clusters are labeled instead of individual data points.
-%%
-Although this work focuses in faces, the method proposed can be applied to other domain fields.
-%%
-The only requirement is that the designer has to  conceive a technique in which objects of the same class are placed closed to each other in the corresponding vector space.
+Although this work focuses on faces, the method proposed can be applied to other domain fields.
+The only requirement is that the designer has to conceive a technique in which objects of the same class are placed closed to each other in the corresponding vector space.
 
 One of the limitations of this work is related to the size of the video set used for the overall evaluation of our method. 
-%%
 This is due to the difficulty of finding videos where it is possible to manually identify in each frame whether each person present is registered or not in our labeled clusters.
-%%
-Other limitation is that the proposed method was not able to detect partially covered faces. 
-%%
+Another limitation is that the proposed method was not able to detect partially covered faces. 
 This is due to a limitation of the MTCNN~\cite{mtcnn}, which is currently not robust enough to deal with this condition.
-%%
 The results of this application were published at relevant multimedia conference~\cite{mendes2020cluster}.
