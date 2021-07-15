@@ -33,7 +33,7 @@ The high value of the standard deviation for the time estimates indicates that t
 \label{sec:recommendation_method}
 
 Our method intends to recommend educational videos based on the lecturers that appear in each video, so that, when a person watches a video, other videos containing the same lecturers are recommended.
-For doing that, we first represent each video in the dataset of educational videos by the clusters of lecturers present using \emph{Video Face Clustering}. Once we have all videos represented, we perform the pipeline depicted in Figure \ref{fig:video_recommendation}. Each of the steps of this pipeline is described in the remainder of this section.
+To do that, we first represent each video in the dataset of educational videos by the clusters of lecturers present using \emph{Video Face Clustering}. Once we have all videos represented, we perform the pipeline depicted in Figure \ref{fig:video_recommendation}. Each of the steps of this pipeline is described in the remainder of this section.
 
 \begin{figure}[!ht]
   \centering
@@ -43,7 +43,7 @@ For doing that, we first represent each video in the dataset of educational vide
 \end{figure}
 
 First, we gather the centroids from the videos of the dataset as one single set and perform the \textit{Centroids Clustering}.
-For performing this clustering, we also use the strategy for an unknown number of clusters described in Section \ref{subsec:unknown_nclusters}. 
+To perform this clustering, we also use the strategy for an unknown number of clusters described in Section \ref{subsec:unknown_nclusters}. 
 By doing that, we group centroids from the same lecturer that are in different videos. For instance, in Figure \ref{fig:video_recommendation}, one can see that the \emph{purple lecturer} is present in both Videos 1 and 2, while the \emph{orange lecturer} is present in both Videos 2 and n. By the end of this step, we have the group $L$ of lecturers present in the dataset of videos $V$. We also denote $L_v$ as the group of lecturers present in video $v$.
 
 Next, based on these relationships among different videos, we perform \textit{Ranking}, by recommending videos in which lecturers of the current video are present. 

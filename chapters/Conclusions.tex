@@ -21,7 +21,8 @@ In summary, we highlight the following contributions of this dissertation:
     \item A method for face detection in equirectangular 360-images that uses models pre-trained with traditional images;
     \item A synthetic dataset for face detection in 360-images;
     \item An authoring model for interactive 360-videos;
-    \item An approach for positioning subtitles in 360-videos based on the actors' positions and the user's viewport;
+    \item A player for interactive 360-videos;
+    \item An approach for automatic positioning subtitles in 360-videos based on the actors' positions;
 \end{enumerate}
 
 The choice for our three proposed applications was due to observations of opportunities to apply \emph{Video Face Clustering} in different contexts. We started with \emph{Video Face Recognition} task. We observed that the use of only the \emph{Video Face Clustering} part of the method could generate the time segments that each actor is present without having to identify them. Then, we hypothesized that this particular feature could also be used to clustering actors in different videos. From this observation, we decided to investigate a method for \emph{Educational Video Recommendation} using this clustering of actors in different videos. The idea for \emph{Subtitles Positioning in 360-video} came from the authoring model we developed. We observed that we could automatically identify the actors using \emph{Video Face Clustering} so that the subtitles could follow the speakers in the 360-video. Thus, we adapted \emph{Video Face Clustering} for the 360-video setting. It is worth noticing that with this adaptation, the other two applications~(\emph{Video Face Recognition} and \emph{Educational Video Recommendation}) could also be applied to the context of 360-videos.

@@ -19,7 +19,7 @@ in Section \ref{sec:recognition_discussion}, we conclude this chapter by discuss
 \section{Dataset}
 \label{sec:recognition_dataset}
 Our dataset was collected using the information provided by the Brazilian Chamber of Deputies\footnote{\url{https://www.camara.leg.br/}} for the 55th legislature, which was in session from February 1st, 2015 through January 31st, 2019.
-In total, 623 different deputies participated during some period in the 55th legislature, but we collected only 513 deputies from this set.
+In total, 623 different deputies participated during some period in the 55th legislature, but we collected only the initial 513 deputies.
 
 For each of the 513 deputies, we collected images in which he/she was present using Google images.
 The resulting dataset has a total of 9,003 images, with a mean of ~17.55 images per deputy and a standard deviation of ~6.91. 
@@ -166,7 +166,7 @@ On the other hand, when the clustering is not perfect according to this criterio
 For this reason, the authors normalize this value by the maximum reduction in entropy the clustering information could provide, specifically, $H(C)$.
 $H(C|K)$ has its maximal value when it is equal to $H(C)$ and provides no new information.
 
-Finally, to address to the convention of $1$ being desirable and $0$ undesirable, the authors define homogeneity as:
+Finally, to address to the convention of $1$ being desirable and $0$ undesirable, the homogeneity is defined as:
 
 \begin{equation}
 \label{equation:homo}
@@ -478,7 +478,7 @@ Figure \ref{fig:timeline_non_reg} shows the first 24 seconds of \emph{Video j}~(
 \section{Discussion}
 \label{sec:recognition_discussion}
 
-This chapter proposed a cluster-matching-based method for video face recognition. 
+In this chapter, we proposed a cluster-matching-based method for video face recognition. 
 This method uses \emph{Video Face Clustering} and a heuristic for cluster matching to recognize people in videos. 
 Our method has achieved a recall of 99.435\% and precision of 99.131\% when considering all faces present in the frames extracted from a set of 13 video files.  
 %%
