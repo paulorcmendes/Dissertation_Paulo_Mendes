@@ -18,7 +18,7 @@ in Section \ref{sec:recognition_discussion}, we conclude this chapter by discuss
 
 \section{Dataset}
 \label{sec:recognition_dataset}
-Our dataset was collected using the information provided by the Brazilian Chamber of Deputies\footnote{\url{https://www.camara.leg.br/}} for the 55th legislature, which was in session from February 1st, 2015 through January 31st, 2019.
+Our dataset was collected using the information provided by the Brazilian Chamber of Deputies\footnote{https://www.camara.leg.br/} for the 55th legislature, which was in session from February 1st, 2015 through January 31st, 2019.
 In total, 623 different deputies participated during some period in the 55th legislature, but we collected only the initial 513 deputies.
 
 For each of the 513 deputies, we collected images in which he/she was present using Google images.
@@ -106,7 +106,7 @@ Hence, the person in the video represented by the query cluster is not present i
 In this section, we evaluate the quality of the clustering generated in the macro-step \emph{Face Clustering}.
 In the \emph{Face Detection} step, we use MTCNN~\cite{mtcnn} (Multitask
 Cascaded Convolutional Networks) which is widely used for the face detection task~\cite{mtcnn1, mtcnn3}.
-We used the  \emph{mtcnn} Python library for its implementation\footnote{\url{https://pypi.org/project/mtcnn/}} and resized each face detected to 224x224.
+We used the  \emph{mtcnn} Python library for its implementation\footnote{https://pypi.org/project/mtcnn/} and resized each face detected to 224x224.
 We tested three different CNNs for the \emph{Embeddings Generation} step in association with three different clustering algorithms for the \emph{Clustering} step.
 For that, we evaluated each pair of \emph{CNN x ClusteringAlg} through the quality of the clusters they generated. 
 To experiment, we used the training set with 8490 deputy images.
