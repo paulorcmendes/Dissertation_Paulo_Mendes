@@ -46,7 +46,7 @@ Given an equirectangular image, which could also be a frame from a 360-video, we
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.5\linewidth]{img/video360/viewport.jpg}
-    \caption{Example of a viewport from a 360-video. Extracted from \cite{nguyen2020evaluation}.}
+    \caption{Example of a viewport from a 360-video. Extracted from Nguyen \emph{et al.} \cite{nguyen2020evaluation}.}
     \label{fig:authoring_exviewport}
 \end{figure}
 
@@ -69,7 +69,7 @@ Similar to Fu \emph{et al.} \cite{fu2019fddb}, we created a synthetic dataset ba
 
 The FDDB dataset~\cite{jain2010fddb} is a popular benchmark for face detection evaluation containing 2845 images and 5171 faces. We collected 19 indoor and outdoor equirectangular images from Google Images,\footnote{\url{https://www.google.com/imghp}} ESO,\footnote{\url{https://www.eso.org/public}} and PxHere\footnote{\url{https://pxhere.com}} to use as background.
 %%
-For each image in the FDDB dataset, we randomly chose a latitude, longitude, and equirectangular background image to project it following the projection to equirectangular described in \cite{su2017learning}.
+For each image in the FDDB dataset, we randomly chose a latitude, longitude, and equirectangular background image to project it following the projection to equirectangular described in the work of Su \emph{et al.} \cite{su2017learning}.
 %%
 For each face present on the FDDB image, we projected its bounding box to the new equirectangular synthetic image. Figure \ref{fig:authoring_fddb_proj} shows an example of an image from FDDB projected in the polar coordinates \emph{lat} $ = -60^{\circ}$ \emph{long} $ = 0^{\circ}$ to an equirectangular image.
 
@@ -276,7 +276,7 @@ In the proposed model, each \emph{<scene360>} has always a main 360-degree inter
 
 The \emph{onselect} attribute is used to support user navigation through 360 scenes~(\textbf{RI.1}). This attribute can be defined in any media element, by referencing the \emph{id} of the target scene in its value. Once defined in an element, it transforms it into a navigation element for the referenced scene. Moreover, the \emph{<preview>} defines a viewport of a \emph{<scene360>} using its \emph{id} in the \emph{src}, which can be viewed as a 2D video inside another scene. The temporal segment of the target scene displayed in the preview is defined by the attributes \emph{clipBegin} and \emph{clipEnd}. 
 
-The 360-video might have a particular region of interest to the viewer, which is represented by the \emph{<hotspot>}~(\textbf{RI.2}) element. \cite{Britta2017} defines a hotspot as an interactive area in a video that invokes an action. The author may create interactions when the user is either looking at it or not. As in the other elements, its position is defined by the \emph{r, phi, theta} attributes. This element has also the attributes \emph{onLookAt} and \emph{duringNotLookingAt}. The attribute \emph{onLookAt} specifies another element to be started once the user looks at the \emph{<hotspot>}. Similarly, the attribute \emph{duringNotLookingAt} specifies another element to be started when the user is not looking at the \emph{<hotspot>} and is stopped once the user looks at it.
+The 360-video might have a particular region of interest to the viewer, which is represented by the \emph{<hotspot>}~(\textbf{RI.2}) element. Meixner \cite{Britta2017} defines a hotspot as an interactive area in a video that invokes an action. The author may create interactions when the user is either looking at it or not. As in the other elements, its position is defined by the \emph{r, phi, theta} attributes. This element has also the attributes \emph{onLookAt} and \emph{duringNotLookingAt}. The attribute \emph{onLookAt} specifies another element to be started once the user looks at the \emph{<hotspot>}. Similarly, the attribute \emph{duringNotLookingAt} specifies another element to be started when the user is not looking at the \emph{<hotspot>} and is stopped once the user looks at it.
 
 The \emph{<mirror>} element refers to picture-in-picture live view of a viewport of the \emph{<scene360>} (\textbf{RI.3}). This viewport is defined using the \emph{src} attribute and assigning it to the \emph{id} of a \emph{<hotspot>} element. Using these elements, authors can define that when the user is staring at a viewport different from the one defined as a \emph{<hotspot>}, the \emph{<mirror>} element will be triggered showing the PiP view at the current user's viewport, attracting his attention to the important section of the 360-degree video. Since the \emph{<mirror>} element refers to a viewport of the current scene, it does not support \emph{onselect} because it would not be intuitive to have an element referring to a scene and navigating to another when selected.
 
