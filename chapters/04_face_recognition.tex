@@ -70,7 +70,7 @@ We decided to use the inverse of the RMSE since we want to return larger values 
     s_{q,k} = \frac{1}{\sqrt{\frac{1}{n}\sum_{i=0}^{n}{(q_i-c_{k,i})^2}}}
 \end{equation}
 
-Since we are not interested in clusters that too distant from $q$, we define $\overline{s}_{q,k}$ that considers only the $\alpha$ largest $s_q$ values. The $\alpha$ value is a parameter that we further evaluate in this chapter. 
+Since we are not interested in clusters that are too distant from $q$, we define $\overline{s}_{q,k}$ that considers only the $\alpha$ largest $s_q$ values. The $\alpha$ value is a parameter that we further evaluate in this chapter. 
 Thus, our similarity function becomes
 
 \begin{equation}
@@ -130,7 +130,7 @@ K-Means~\cite{lloyd1982least} is one of the most widely used unsupervised machin
 To process the data to be clustered, the K-Means algorithm begins with a randomly selected group of $K$ centroids, which are updated iteratively to optimize the distance of the data points to the closest centroid.
 The algorithm stops when either the centroids have stabilized or the maximum number of iterations has been reached.
 
-The Affinity Propagation algorithm~\cite{frey2007clustering}, in contrast with other clustering methods, does not require the number of clusters to be previously specified.
+The Affinity Propagation algorithm~\cite{frey2007clustering}, in contrast to other clustering methods, does not require the number of clusters to be previously specified.
 In this algorithm, each data point sends messages to the other points informing them of their relative attractiveness to the sender. 
 Those targets then reply to the senders informing their availability to associate with them, considering the attractiveness of all the messages they received.
 The senders then reply to the targets informing the target's updated relative attractiveness.
