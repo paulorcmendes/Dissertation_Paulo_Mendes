@@ -866,7 +866,7 @@ Centro Técnico Científico}}
 \newcommand{\puc@approvedby}{Aprovada pela Comissão Examinadora abaixo
   assinada.}
 
-\newcommand{\puc@approvedbyuk}{Approved by the undersigned Examination
+\newcommand{\puc@approvedbyuk}{Approved by the Examination
   Committee.}
 
 \newcommand{\puc@presentedforphd}{Tese apresentada como requisito
@@ -882,7 +882,7 @@ Centro Técnico Científico}}
   Pós--graduação em \puc@program do Departamento de \puc@department do
   \puc@school da \puc@uni.}
 
-\newcommand{\puc@presentedformscuk}{Master thesis presented to the Programa de
+\newcommand{\puc@presentedformscuk}{Dissertation presented to the Programa de
   Pós--graduação em \puc@program\ of \puc@uni ~in partial fulfillment of
   the requirements for the degree of Mestre em \puc@program.}
 
